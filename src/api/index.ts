@@ -1,11 +1,10 @@
-import { host } from 'constants/apiMethods';
 
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { getAccessToken, getRefreshToken } from 'utils/token';
 
 export const api = axios.create({
-    baseURL: host,
+    baseURL: 'http://127.0.0.1:8000/',
 });
 
 api.interceptors.request.use(
@@ -16,7 +15,6 @@ api.interceptors.request.use(
             (config.headers as Record<string, string>)['Authorization'] = `Bearer ${token}`;
         }
 
-        config.withCredentials = window.location.href.includes('.og1.ru');
         return config;
     },
     (error) => {

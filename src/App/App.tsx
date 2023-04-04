@@ -2,6 +2,7 @@ import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import moment from 'moment';
+
 import 'moment-timezone';
 import 'moment/locale/ru';
 import 'i18n';
@@ -26,9 +27,5 @@ export const App: React.FC = () => {
     //     dispatch(refreshTokensAction());
     // }, [dispatch]);
 
-    return (
-        <DndProvider backend={HTML5Backend}>
-            
-        </DndProvider>
-    );
+    return <DndProvider backend={HTML5Backend}></DndProvider>;
 };

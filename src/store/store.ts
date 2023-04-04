@@ -1,9 +1,7 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { AnyAction, CombinedState, combineReducers, configureStore, ThunkDispatch } from '@reduxjs/toolkit';
 
-const reducer = combineReducers({
-
-});
+const reducer = combineReducers({});
 
 export const store = configureStore({
     reducer,
