@@ -1,1 +1,1 @@
-# chekers-frontend
+# checkers-frontend
