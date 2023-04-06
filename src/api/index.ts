@@ -1,4 +1,3 @@
-
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { getAccessToken, getRefreshToken } from 'utils/token';
@@ -33,7 +32,7 @@ api.interceptors.response.use(
 
         if (
             (error.response?.status === 401 || error.response?.status === 400) &&
-            originalRequest.url?.includes('/token/refresh/')
+            originalRequest.url?.includes('/user/refresh-token/')
         ) {
             localStorage.removeItem('refresh');
             localStorage.removeItem('access');
@@ -54,7 +53,7 @@ api.interceptors.response.use(
             originalRequest._retry = true;
 
             return api
-                .post<Promise<{ access: string }>, AxiosResponse<{ access: string }>>(`/token/refresh/`, {
+                .post<Promise<{ access: string }>, AxiosResponse<{ access: string }>>(`/user/refresh-token/`, {
                     refresh,
                 })
                 .then((res) => {
