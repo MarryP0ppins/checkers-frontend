@@ -4,11 +4,12 @@
     "private": true,
     "scripts": {
         "start": "react-scripts start",
-        "build-prod": "react-scripts build && node scripts/addVersionFile.js",
         "lint": "eslint \"src/**/*.+(js|jsx|ts|tsx|json)\"",
         "lint-fix": "eslint --fix \"src/**/*.+(js|jsx|ts|tsx|json)\"",
         "prettier": "prettier --write \"src/**/*.+(js|jsx|ts|tsx|json)\"",
-        "build": "react-scripts build"
+        "pull": "git pull origin main",
+        "build": "react-scripts build",
+        "build-prod": "react-scripts build && node scripts/addVersionFile.js"
     },
     "dependencies": {
         "@bem-react/classname": "1.6.0",
