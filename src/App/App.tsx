@@ -7,7 +7,6 @@ import { refreshTokensAction } from 'store/actions/login';
 
 import 'moment-timezone';
 import 'moment/locale/ru';
-import 'i18n';
 
 import 'root.scss';
 import './App.css';

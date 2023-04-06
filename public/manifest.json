@@ -1,0 +1,12 @@
+{
+  "short_name": "Checkers",
+  "name": "Checkers",
+  "icons": [{
+    "src": "./google-touch-icon.png",
+    "sizes": "512x512"
+}],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
