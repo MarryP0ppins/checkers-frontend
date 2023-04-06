@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { useDispatch } from 'react-redux';
 import moment from 'moment';
 import { refreshTokensAction } from 'store/actions/login';
 
@@ -10,6 +9,7 @@ import 'moment/locale/ru';
 
 import 'root.scss';
 import './App.css';
+import { useAppDispatch } from 'store/store';
 
 moment.locale('ru');
 moment.tz.load({
@@ -22,7 +22,7 @@ moment.tz.load({
 moment.tz.setDefault('Europe/Moscow');
 
 export const App: React.FC = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         dispatch(refreshTokensAction());

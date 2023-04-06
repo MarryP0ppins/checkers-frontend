@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { getAccessToken, getRefreshToken } from 'utils/token';
 
@@ -7,7 +7,7 @@ export const api = axios.create({
 });
 
 api.interceptors.request.use(
-    (config: AxiosRequestConfig) => {
+    (config: InternalAxiosRequestConfig) => {
         const token = getAccessToken();
 
         if (token) {
@@ -70,7 +70,7 @@ api.interceptors.response.use(
     },
 );
 
-export const getApiRequest = <ResponseType, BodyType>(link: string, body?: BodyType): Promise<ResponseType> =>
+export const getApiRequest = <ResponseType>(link: string, body?: Record<string, string>): Promise<ResponseType> =>
     api
         .get<ResponseType>(link, body)
         .then((res) => res.data)
@@ -94,7 +94,7 @@ export const postApiRequest = <ResponseType, BodyType>(link: string, body?: Body
             throw JSON.stringify(err.response?.data);
         });
 
-export const deleteApiRequest = <ResponseType, BodyType>(link: string, params?: BodyType): Promise<ResponseType> =>
+export const deleteApiRequest = <ResponseType>(link: string, params?: Record<string, string>): Promise<ResponseType> =>
     api
         .delete<ResponseType>(link, params)
         .then((res) => res.data)
