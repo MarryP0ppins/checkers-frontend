@@ -25,10 +25,10 @@ export const App: React.FC = () => {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        dispatch(refreshTokensAction());
+        void dispatch(refreshTokensAction());
     }, [dispatch]);
 
     return <DndProvider backend={HTML5Backend}>
-        
+        <div>{moment().format()}</div>
     </DndProvider>;
 };
