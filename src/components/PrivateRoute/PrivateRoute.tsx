@@ -4,10 +4,7 @@ import { useAppSelector } from 'store/store';
 
 import { PageLoader } from 'components/PageLoader';
 
-export const PrivateRoute: React.FC<{ children: React.ReactNode; path: string }> = ({
-    children,
-    path,
-}) => {
+export const PrivateRoute: React.FC<{ children: React.ReactNode; path: string }> = ({ children, path }) => {
     const { isLoggedIn } = useAppSelector((state) => state.login);
 
     if (isLoggedIn === false) {

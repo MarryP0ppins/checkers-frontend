@@ -17,6 +17,6 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "./jest.config.ts", "./jest.setup.ts", "cypress"],
+  "include": ["src", "./jest.config.ts", "./jest.setup.ts"],
   "exclude": ["node_modules", "scripts"]
 }

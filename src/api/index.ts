@@ -1,9 +1,4 @@
-import axios, {
-    AxiosError,
-    AxiosRequestConfig,
-    AxiosResponse,
-    InternalAxiosRequestConfig,
-} from 'axios';
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 
 import { getAccessToken, getRefreshToken } from 'utils/token';
 
@@ -54,12 +49,7 @@ api.interceptors.response.use(
         }
 
         const refresh = getRefreshToken();
-        if (
-            refresh &&
-            originalRequest &&
-            !originalRequest._retry &&
-            error.response?.status === 401
-        ) {
+        if (refresh && originalRequest && !originalRequest._retry && error.response?.status === 401) {
             originalRequest._retry = true;
 
             return api

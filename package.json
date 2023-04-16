@@ -8,8 +8,7 @@
         "lint-fix": "eslint --fix \"src/**/*.+(js|jsx|ts|tsx|json)\"",
         "prettier": "prettier --write \"src/**/*.+(js|jsx|ts|tsx|json)\"",
         "pull": "git pull origin main",
-        "build": "react-scripts build",
-        "build-prod": "react-scripts build && node scripts/addVersionFile.js"
+        "build": "react-scripts build"
     },
     "dependencies": {
         "@bem-react/classname": "1.6.0",

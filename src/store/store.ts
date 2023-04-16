@@ -1,11 +1,5 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-import {
-    AnyAction,
-    CombinedState,
-    combineReducers,
-    configureStore,
-    ThunkDispatch,
-} from '@reduxjs/toolkit';
+import { AnyAction, CombinedState, combineReducers, configureStore, ThunkDispatch } from '@reduxjs/toolkit';
 import { loaderReducer as loader } from 'store/reducers/loader';
 import { loginReducer as login } from 'store/reducers/login';
 
