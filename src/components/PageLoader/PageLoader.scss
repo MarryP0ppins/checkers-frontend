@@ -1,0 +1,35 @@
+.pageLoader {
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    position: absolute;
+    z-index: 100;
+    background-color: var(--color-essential);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    &-loader {
+        display: flex;
+        position: relative;
+        align-items: center;
+    }
+    @keyframes rot {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+    &-animation {
+        display: flex;
+        animation: 2s linear 0s normal none infinite running rot;
+    }
+    &-logo {
+        position: absolute;
+        left: 50px;
+        top: 50px;
+    }
+}

@@ -1,0 +1,28 @@
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 70px;
+    background-color: var(--color-essential);
+
+    &-left {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        svg {
+            height: 75%;
+        }
+
+        h1 {
+            font-size: xx-large;
+        }
+    }
+
+    &-right {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-right: 14px;
+    }
+}

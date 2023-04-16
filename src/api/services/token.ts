@@ -4,6 +4,6 @@ interface TokenPromise {
     access: string;
 }
 
-export const refreshTokens = (token: string): Promise<TokenPromise> => {
-    return postApiRequest('/user/refresh-token/', { refresh: token });
+export const refreshTokens = async (token: string): Promise<TokenPromise> => {
+    return await postApiRequest('/user/refresh-token/', { refresh: token });
 };

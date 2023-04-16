@@ -41,8 +41,8 @@ const loginSlice = createSlice<LoginState, SliceCaseReducers<LoginState>>({
             state.fetchStatus = FetchStatus.FETCHED;
             state.isLoggedIn = true;
             state.tokens = {
-                access: payload?.access || '',
-                refresh: payload?.refresh || '',
+                access: payload?.access_token || '',
+                refresh: payload?.refresh_token || '',
             };
             state.user = {
                 id: payload?.id || -1,
@@ -73,6 +73,10 @@ const loginSlice = createSlice<LoginState, SliceCaseReducers<LoginState>>({
                 state.logoutFetchStatus = FetchStatus.ERROR;
             });
         builder
+            .addCase(refreshTokensAction.pending, (state) => {
+                state.fetchStatus = FetchStatus.FETCHING;
+                state.error = null;
+            })
             .addCase(refreshTokensAction.fulfilled, (state, { payload }) => {
                 if (!payload) {
                     localStorage.removeItem('refresh');

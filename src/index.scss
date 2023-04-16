@@ -14,47 +14,15 @@ body {
     scrollbar-width: auto;
 }
 
+a{
+    text-decoration: none;
+    color:unset;
+}
+
 p {
     margin: 0;
 }
 
-.layout,
-.layout_white {
-    padding: 20px 80px;
-    width: 100%;
-    max-height: 100vh;
-    min-height: 100vh;
-    overflow-y: scroll;
-}
-
-.layout_white {
-    background-color: var(--color-essential);
-}
-
-.layout_question_bank {
-    width: 100%;
-    max-height: 100vh;
-    min-height: 100vh;
-    overflow-x: hidden;
-}
-
-@media screen and (max-width: 1024px) {
-    .layout,
-    .layout_white {
-        padding: 22px 34px;
-    }
-}
-
-.row {
-    display: flex;
-}
-
 #root {
-    background-color: var(--color-dashboard);
-}
-
-@media screen and (min-width: 2000px) {
-    html {
-        font-size: 12px;
-    }
+    background-color: var(--color-background-sandy);
 }

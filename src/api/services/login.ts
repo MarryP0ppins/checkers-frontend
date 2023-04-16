@@ -6,14 +6,14 @@ export interface LoginResponse {
     id: number;
     email: string;
     username: string;
-    refresh: string;
-    access: string;
+    refresh_token: string;
+    access_token: string;
 }
 
 export const fetchLoginForm = (values: AuthUser): Promise<LoginResponse | undefined> => {
     return api
         .post<Promise<LoginResponse>, AxiosResponse<LoginResponse>>(`/user/login/`, {
-            username: values.username,
+            email: values.email,
             password: values.password,
         })
         .then((res) => res?.data)

@@ -1,4 +1,9 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
+import axios, {
+    AxiosError,
+    AxiosRequestConfig,
+    AxiosResponse,
+    InternalAxiosRequestConfig,
+} from 'axios';
 
 import { getAccessToken, getRefreshToken } from 'utils/token';
 
@@ -49,13 +54,21 @@ api.interceptors.response.use(
         }
 
         const refresh = getRefreshToken();
-        if (refresh && originalRequest && !originalRequest._retry && error.response?.status === 401) {
+        if (
+            refresh &&
+            originalRequest &&
+            !originalRequest._retry &&
+            error.response?.status === 401
+        ) {
             originalRequest._retry = true;
 
             return api
-                .post<Promise<{ access: string }>, AxiosResponse<{ access: string }>>(`/user/refresh-token/`, {
-                    refresh,
-                })
+                .post<Promise<{ access: string }>, AxiosResponse<{ access: string }>>(
+                    `/user/refresh-token/`,
+                    {
+                        refresh,
+                    },
+                )
                 .then((res) => {
                     if (res.status === 200) {
                         localStorage.setItem('access', res?.data.access);
@@ -70,7 +83,10 @@ api.interceptors.response.use(
     },
 );
 
-export const getApiRequest = <ResponseType>(link: string, body?: Record<string, string>): Promise<ResponseType> =>
+export const getApiRequest = <ResponseType>(
+    link: string,
+    body?: Record<string, string>,
+): Promise<ResponseType> =>
     api
         .get<ResponseType>(link, body)
         .then((res) => res.data)
@@ -78,7 +94,10 @@ export const getApiRequest = <ResponseType>(link: string, body?: Record<string, 
             throw JSON.stringify(err.response?.data);
         });
 
-export const patchApiRequest = <ResponseType, BodyType>(link: string, body?: BodyType): Promise<ResponseType> =>
+export const patchApiRequest = <ResponseType, BodyType>(
+    link: string,
+    body?: BodyType,
+): Promise<ResponseType> =>
     api
         .patch<ResponseType>(link, body)
         .then((res) => res.data)
@@ -86,7 +105,10 @@ export const patchApiRequest = <ResponseType, BodyType>(link: string, body?: Bod
             throw JSON.stringify(err.response?.data);
         });
 
-export const postApiRequest = <ResponseType, BodyType>(link: string, body?: BodyType): Promise<ResponseType> =>
+export const postApiRequest = <ResponseType, BodyType>(
+    link: string,
+    body?: BodyType,
+): Promise<ResponseType> =>
     api
         .post<ResponseType>(link, body)
         .then((res) => res.data)
@@ -94,7 +116,10 @@ export const postApiRequest = <ResponseType, BodyType>(link: string, body?: Body
             throw JSON.stringify(err.response?.data);
         });
 
-export const deleteApiRequest = <ResponseType>(link: string, params?: Record<string, string>): Promise<ResponseType> =>
+export const deleteApiRequest = <ResponseType>(
+    link: string,
+    params?: Record<string, string>,
+): Promise<ResponseType> =>
     api
         .delete<ResponseType>(link, params)
         .then((res) => res.data)

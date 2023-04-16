@@ -13,6 +13,6 @@ export const refreshTokensAction = createAsyncThunk('login/refresh', async () =>
     const refresh = getRefreshToken();
 
     if (refresh) {
-        return refreshTokens(refresh);
+        return await refreshTokens(refresh);
     }
 });
