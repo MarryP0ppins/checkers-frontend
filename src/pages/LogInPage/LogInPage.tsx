@@ -1,6 +1,6 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { cn } from '@bem-react/classname';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Paper from '@mui/material/Paper';
@@ -16,20 +16,29 @@ const cnLogIn = cn('login-page');
 
 export const LogInPage: React.FC = () => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const { fetchStatus } = useAppSelector((store) => store.login);
     const { register, handleSubmit, reset } = useForm<AuthUser>();
 
     const onSigInFormSubmit = useCallback(
         (values: AuthUser) => {
             dispatch(fetchLogin(values));
-            reset({ password: '' });
         },
-        [dispatch, reset],
+        [dispatch],
     );
 
-    if (fetchStatus === FetchStatus.FETCHED) {
-        return <Navigate to="/" />;
-    }
+    useEffect(() => {
+        switch (fetchStatus) {
+            case FetchStatus.FETCHED:
+                navigate('/');
+                return;
+            case FetchStatus.ERROR:
+                reset({ password: '' });
+                return;
+            default:
+                return;
+        }
+    }, [fetchStatus, navigate, reset]);
 
     return (
         <div className={cnLogIn()}>

@@ -10,9 +10,11 @@ import {
 import moment from 'moment';
 import { LogInPage } from 'pages/LogInPage';
 import { refreshTokensAction } from 'store/actions/login';
-import { useAppDispatch } from 'store/store';
+import { useAppDispatch, useAppSelector } from 'store/store';
+import { FetchStatus } from 'types/api';
 
 import { Header } from 'components/Header';
+import { PageLoader } from 'components/PageLoader';
 
 //import { PrivateRoute } from 'components/PrivateRoute';
 import 'moment-timezone';
@@ -26,6 +28,7 @@ moment.tz.setDefault('Europe/Moscow');
 
 export const App: React.FC = () => {
     const dispatch = useAppDispatch();
+    const { logoutFetchStatus } = useAppSelector((store) => store.login);
 
     useEffect(() => {
         void dispatch(refreshTokensAction());
@@ -50,6 +53,7 @@ export const App: React.FC = () => {
 
     return (
         <DndProvider backend={HTML5Backend}>
+            <PageLoader showLoading={logoutFetchStatus == FetchStatus.FETCHING} />
             <RouterProvider router={router} />
         </DndProvider>
     );
