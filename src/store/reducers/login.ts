@@ -1,6 +1,7 @@
 import { createSlice, SliceCaseReducers } from '@reduxjs/toolkit';
 import { fetchLogin, refreshTokensAction } from 'store/actions/login';
 import { fetchLogout } from 'store/actions/logout';
+import { registrationAction } from 'store/actions/registration';
 import { FetchStatus } from 'types/api';
 import { UserResponse } from 'types/singin';
 import { Tokens } from 'types/tokens';
@@ -12,6 +13,7 @@ export interface Answer {
 export interface LoginState {
     isLoggedIn?: boolean;
     fetchStatus: FetchStatus;
+    registrationStatus: FetchStatus;
     tokens: Tokens;
     user: UserResponse | null;
     error: unknown;
@@ -20,6 +22,7 @@ export interface LoginState {
 
 const initialState: LoginState = {
     fetchStatus: FetchStatus.INITIAL,
+    registrationStatus: FetchStatus.INITIAL,
     tokens: { refresh: '', access: '' },
     user: null,
     error: null,
@@ -101,6 +104,22 @@ const loginSlice = createSlice<LoginState, SliceCaseReducers<LoginState>>({
                     ...initialState,
                     isLoggedIn: false,
                 };
+            });
+        builder
+            .addCase(registrationAction.pending, (state) => {
+                state.registrationStatus = FetchStatus.FETCHING;
+                state.error = null;
+            })
+            .addCase(registrationAction.fulfilled, (state, { payload }) => {
+                state.registrationStatus = FetchStatus.FETCHED;
+                state.user = {
+                    id: payload?.id || -1,
+                    email: payload?.email || '',
+                    username: payload?.username || '',
+                };
+            })
+            .addCase(registrationAction.rejected, (state) => {
+                state.registrationStatus = FetchStatus.ERROR;
             });
     },
 });

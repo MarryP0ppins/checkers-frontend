@@ -1,0 +1,24 @@
+.reg-page {
+    height: 100vh;
+    &-form {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        height: 100%;
+    }
+    &-paper {
+        padding: 20px;
+        width: 340px;
+        margin: 20px auto;
+    }
+
+    &-input {
+        input {
+            font-size: small;
+        }
+    }
+
+    &-submit {
+        margin: 16px 0 !important;
+    }
+}

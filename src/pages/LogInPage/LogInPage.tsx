@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { cn } from '@bem-react/classname';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Paper from '@mui/material/Paper';
@@ -48,7 +48,7 @@ export const LogInPage: React.FC = () => {
                     <TextField
                         inputProps={{ ...register('email') }}
                         InputProps={{ className: cnLogIn('input') }}
-                        placeholder="почта"
+                        placeholder="Введите почту"
                         label="Почта"
                         type="email"
                         size="small"
@@ -59,7 +59,7 @@ export const LogInPage: React.FC = () => {
                     <TextField
                         inputProps={{ ...register('password') }}
                         InputProps={{ className: cnLogIn('input') }}
-                        placeholder="пароль"
+                        placeholder="Введите пароль"
                         label="Пароль"
                         type="password"
                         size="small"
@@ -79,6 +79,9 @@ export const LogInPage: React.FC = () => {
                     >
                         Войти
                     </LoadingButton>
+                    <div className={cnLogIn('reg')}>
+                        Нет учетной записи? <Link to="/registration">Регистрация</Link>
+                    </div>
                 </Paper>
             </form>
         </div>

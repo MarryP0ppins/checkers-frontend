@@ -14,11 +14,18 @@
 
     &-input {
         input {
-            font-size: large;
+            font-size: small;
         }
     }
 
     &-submit {
         margin: 16px 0 !important;
+    }
+
+    &-reg {
+        font-size: 9px;
+        a {
+            color: rgb(100, 100, 219);
+        }
     }
 }

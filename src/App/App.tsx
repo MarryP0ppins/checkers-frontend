@@ -4,6 +4,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
 import moment from 'moment';
 import { LogInPage } from 'pages/LogInPage';
+import { RegistrationPage } from 'pages/RegistrationPage';
 import { refreshTokensAction } from 'store/actions/login';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { FetchStatus } from 'types/api';
@@ -42,6 +43,7 @@ export const App: React.FC = () => {
                     }
                 />
                 <Route path="login" element={<LogInPage />} />
+                <Route path="registration" element={<RegistrationPage />} />
             </>,
         ),
     );
