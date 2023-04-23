@@ -18,6 +18,5 @@ export type State = ReturnType<typeof store.getState>;
 export type Action = typeof store.dispatch;
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
-export const useAppDispatch = (): ThunkDispatch<CombinedState<State>, null, AnyAction> =>
-    useDispatch<Action>();
+export const useAppDispatch = (): ThunkDispatch<CombinedState<State>, null, AnyAction> => useDispatch<Action>();
 export const useAppSelector: TypedUseSelectorHook<State> = useSelector;

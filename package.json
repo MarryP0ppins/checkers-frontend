@@ -61,7 +61,6 @@
         "eslint-plugin-react": "7.32.2",
         "eslint-plugin-react-hooks": "4.6.0",
         "eslint-plugin-simple-import-sort": "10.0.0",
-        "standart": "6.1.0",
         "lint-staged": "13.2.0",
         "lost": "9.0.1",
         "prettier": "2.8.7",
@@ -69,6 +68,7 @@
         "sass": "1.60.0",
         "sass-loader": "13.2.2",
         "source-map-explorer": "2.5.3",
+        "standart": "6.1.0",
         "style-loader": "3.3.2",
         "ts-node": "10.9.1"
     },

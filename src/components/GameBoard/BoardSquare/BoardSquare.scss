@@ -1,0 +1,44 @@
+.board-square {
+    position: relative;
+    width: 12.5%;
+    height: 12.5%;
+    background-color: #e8dab5;
+
+    &_black {
+        background-color: #362b2b;
+    }
+
+    &-dropZone {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background-color: transparent;
+    }
+
+    &-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: none;
+
+        &_illegal {
+            background-color: red;
+            display: initial;
+            opacity: 0.5;
+        }
+
+        &_possible {
+            background-color: yellow;
+            display: initial;
+            opacity: 0.5;
+        }
+
+        &_legal {
+            background-color: green;
+            display: initial;
+            opacity: 0.5;
+        }
+    }
+}

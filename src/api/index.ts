@@ -53,12 +53,9 @@ api.interceptors.response.use(
             originalRequest._retry = true;
 
             return api
-                .post<Promise<{ access: string }>, AxiosResponse<{ access: string }>>(
-                    `/user/refresh-token/`,
-                    {
-                        refresh,
-                    },
-                )
+                .post<Promise<{ access: string }>, AxiosResponse<{ access: string }>>(`/user/refresh-token/`, {
+                    refresh,
+                })
                 .then((res) => {
                     if (res.status === 200) {
                         localStorage.setItem('access', res?.data.access);
@@ -73,10 +70,7 @@ api.interceptors.response.use(
     },
 );
 
-export const getApiRequest = <ResponseType>(
-    link: string,
-    body?: Record<string, string>,
-): Promise<ResponseType> =>
+export const getApiRequest = <ResponseType>(link: string, body?: Record<string, string>): Promise<ResponseType> =>
     api
         .get<ResponseType>(link, body)
         .then((res) => res.data)
@@ -84,10 +78,7 @@ export const getApiRequest = <ResponseType>(
             throw JSON.stringify(err.response?.data);
         });
 
-export const patchApiRequest = <ResponseType, BodyType>(
-    link: string,
-    body?: BodyType,
-): Promise<ResponseType> =>
+export const patchApiRequest = <ResponseType, BodyType>(link: string, body?: BodyType): Promise<ResponseType> =>
     api
         .patch<ResponseType>(link, body)
         .then((res) => res.data)
@@ -95,10 +86,7 @@ export const patchApiRequest = <ResponseType, BodyType>(
             throw JSON.stringify(err.response?.data);
         });
 
-export const postApiRequest = <ResponseType, BodyType>(
-    link: string,
-    body?: BodyType,
-): Promise<ResponseType> =>
+export const postApiRequest = <ResponseType, BodyType>(link: string, body?: BodyType): Promise<ResponseType> =>
     api
         .post<ResponseType>(link, body)
         .then((res) => res.data)
@@ -106,10 +94,7 @@ export const postApiRequest = <ResponseType, BodyType>(
             throw JSON.stringify(err.response?.data);
         });
 
-export const deleteApiRequest = <ResponseType>(
-    link: string,
-    params?: Record<string, string>,
-): Promise<ResponseType> =>
+export const deleteApiRequest = <ResponseType>(link: string, params?: Record<string, string>): Promise<ResponseType> =>
     api
         .delete<ResponseType>(link, params)
         .then((res) => res.data)

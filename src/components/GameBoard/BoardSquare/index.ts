@@ -1,0 +1,1 @@
+export { BoardSquare } from './BoardSquare';
