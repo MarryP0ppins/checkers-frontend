@@ -1,3 +1,4 @@
+export { ReactComponent as ArrowLeftIcon } from './icons/arrow-left.svg';
 export { ReactComponent as CheckerBlackIcon } from './icons/checker-black.svg';
 export { ReactComponent as CheckerCrownIcon } from './icons/checker-crown.svg';
 export { ReactComponent as CheckerWhiteIcon } from './icons/checker-white.svg';

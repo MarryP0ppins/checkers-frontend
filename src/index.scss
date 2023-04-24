@@ -4,19 +4,23 @@ html {
 
 body {
     margin: 0;
-    font-family: 'Source Sans Pro', sans-serif;
+    font-family: "Source Sans Pro", sans-serif;
     color: var(--color-text-color);
 }
 
 * {
-    font-family: 'Source Sans Pro', sans-serif;
-    scrollbar-color: var(--schedule-item-indicator-before-fill) var(--color-stroke-maingray);
-    scrollbar-width: auto;
+    font-family: "Source Sans Pro", sans-serif;
 }
 
-a{
+*::-webkit-scrollbar-track {
+    /* фон */
+    background: #E8DAB5;
+}
+
+
+a {
     text-decoration: none;
-    color:unset;
+    color: unset;
 }
 
 p {

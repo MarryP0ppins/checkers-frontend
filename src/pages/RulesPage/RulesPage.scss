@@ -13,20 +13,28 @@
         flex-direction: column;
     }
 
-&-main-title {
-    font-size: 35px;
-    text-decoration:underline;
-    font-weight:bold;
+    &-back-button {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        width: calc(100% - 48px);
+        margin: 24px 24px 0;
+    }
 
-}
+    &-main-title {
+        font-size: 35px;
+        text-decoration: underline;
+        font-weight: bold;
+    }
 
     &-rules {
         max-width: 1024px;
+        margin: 0px 24px 24px 24px;
     }
 
     &-paragraph {
-        text-indent: 40px;
-        font-weight:normal;
+        text-indent: 16px;
+        font-weight: normal;
         text-align: justify;
     }
 }
