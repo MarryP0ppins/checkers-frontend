@@ -54,7 +54,7 @@ export const App: React.FC = () => {
 
     return (
         <DndProvider backend={HTML5Backend}>
-            <PageLoader showLoading={logoutFetchStatus == FetchStatus.FETCHING} />
+            <PageLoader showLoading={logoutFetchStatus === FetchStatus.FETCHING} />
             <RouterProvider router={router} />
         </DndProvider>
     );

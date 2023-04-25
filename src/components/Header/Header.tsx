@@ -61,7 +61,7 @@ export const Header: React.FC<HeaderProps> = () => {
                             aria-controls={open ? 'account-menu' : undefined}
                             aria-haspopup="true"
                             aria-expanded={open ? 'true' : undefined}
-                            disabled={logoutFetchStatus == FetchStatus.FETCHING}
+                            disabled={logoutFetchStatus === FetchStatus.FETCHING}
                         >
                             <Avatar sx={{ width: 32, height: 32 }} />
                         </IconButton>

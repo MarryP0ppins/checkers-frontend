@@ -79,8 +79,8 @@ export class Game {
                 const bCoef = (k: number) => checker.y - k * checker.x;
                 for (let i = 0; i < 4; i++) {
                     let hasChecker = false;
-                    const coef = i % 2 == 1 ? 1 : -1;
-                    const rightPart = i == 1 || i == 2;
+                    const coef = i % 2 === 1 ? 1 : -1;
+                    const rightPart = i === 1 || i === 2;
                     const start = checker.x + (rightPart ? 1 : -1);
                     for (
                         let x = start;

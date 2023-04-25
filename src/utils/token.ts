@@ -1,2 +1,2 @@
-export const getAccessToken = (): string => <string>localStorage.getItem('access') || '';
-export const getRefreshToken = (): string => <string>localStorage.getItem('refresh') || '';
+export const getAccessToken = (): string => localStorage.getItem('access') as string || '';
+export const getRefreshToken = (): string => localStorage.getItem('refresh') as string || '';
