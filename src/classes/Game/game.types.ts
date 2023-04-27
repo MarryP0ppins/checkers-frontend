@@ -17,3 +17,10 @@ export interface PossibleMove {
     toX: number;
     toY: number;
 }
+
+export interface GameConstructorProps {
+    playerCheckersColor: CheckerColor;
+    checkersProperties?: CheckerProperty[];
+    playerMoves?: string[];
+    enemyMoves?: string[];
+}

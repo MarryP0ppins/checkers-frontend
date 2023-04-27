@@ -1,11 +1,10 @@
 html {
-    font-size: 10px;
+    font-size: 16px;
 }
 
 body {
     margin: 0;
     font-family: "Source Sans Pro", sans-serif;
-    color: var(--color-text-color);
 }
 
 * {
@@ -14,21 +13,21 @@ body {
 
 *::-webkit-scrollbar-track {
     /* фон */
-    background: #E8DAB5;
-}
-
-
-a {
-    text-decoration: none;
-    color: unset;
+    background: #e8dab5;
 }
 
 p {
     margin: 0;
 }
 
+.layout {
+    padding: 20px 40px;
+    width: 100%;
+    max-height: calc(100vh - 70px);
+    min-height: calc(100vh - 70px);
+    overflow-y: auto;
+}
+
 #root {
     background-color: var(--color-background-sandy);
-    width: 100%;
-    min-height: 100vh;
 }

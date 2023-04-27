@@ -1,7 +1,23 @@
 .game-board {
     display: flex;
     flex-wrap: wrap;
-    width: 600px;
-    height: 600px;
+    max-width: 600px;
+    max-height: 600px;
     outline: 1px solid black;
+    margin-left: 24px;
+    margin-bottom: 24px;
+
+    &-y-axis {
+        position: absolute;
+        left: -16px;
+        top: calc(50% - 9px);
+        font-size: large;
+    }
+
+    &-x-axis {
+        position: absolute;
+        bottom: -24px;
+        left: calc(50% - 9px);
+        font-size: large;
+    }
 }

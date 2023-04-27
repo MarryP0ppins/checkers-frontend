@@ -1,10 +1,10 @@
 import React from 'react';
-import { Navigate, Route } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useAppSelector } from 'store/store';
 
 import { PageLoader } from 'components/PageLoader';
 
-export const PrivateRoute: React.FC<{ children: React.ReactNode; path: string }> = ({ children, path }) => {
+export const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { isLoggedIn } = useAppSelector((state) => state.login);
 
     if (isLoggedIn === false) {
@@ -15,5 +15,5 @@ export const PrivateRoute: React.FC<{ children: React.ReactNode; path: string }>
         return <PageLoader showLoading={true} />;
     }
 
-    return <Route path={path}>{children}</Route>;
+    return <>{children}</>;
 };

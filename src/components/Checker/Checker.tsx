@@ -13,10 +13,11 @@ const cnChecker = cn('checker');
 
 export const Checker: React.FC<CheckerProps> = ({ game, ...props }) => {
     const canDragHandle = useCallback(() => {
-        const activeCheckerCheck = !game.activeChecker() || game.activeChecker() === props.id;
-        const colorCheck = props.color === game.playerColor();
+        const activeCheckerCheck = !game.getActiveChecker() || game.getActiveChecker()?.id === props.id;
+        const colorCheck = props.color === game.getPlayerColor();
         const canMoveOneMoreTime = game.canDoOneMoreStep();
         const hasPossibleMoves = game.hasPossibleMoves();
+        //const playerTurn = game.isPlayerTurn();
         return colorCheck && activeCheckerCheck && canMoveOneMoreTime && hasPossibleMoves;
     }, [game, props.color, props.id]);
 

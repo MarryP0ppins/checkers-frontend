@@ -1,7 +1,8 @@
 import React, { useCallback } from 'react';
 import { useDrop } from 'react-dnd';
 import { cn } from '@bem-react/classname';
-import { CheckerProperty } from 'classes/Game/game.types';
+import { CheckerColor, CheckerProperty } from 'classes/Game/game.types';
+import moment from 'moment';
 import { ItemTypes } from 'types/game';
 
 import { BoardSquareProps } from './BoardSquare.types';
@@ -13,16 +14,29 @@ const cnBoardSquare = cn('board-square');
 export const BoardSquare: React.FC<BoardSquareProps> = ({ x, y, children, game, updateState }) => {
     const onDropHandle = useCallback(
         (item: CheckerProperty) => {
-            game.killChecker(item.id, x, y);
-            game.moveChecker(item.id, x, y);
-            updateState(Date());
+            game.moveAndKillChecker(item.id, x, y);
+            if (!game.hasPossibleMoves()) {
+                //Здесь будет отправка данных о совершенном ходе
+                console.log(
+                    ` gameId - ${'undefined'}\n`,
+                    `playerId - ${'undefined'}\n`,
+                    `checkerId - ${game.getActiveChecker()?.id ?? -1}\n`,
+                    `newPositions - ${game.getActiveCheckerMoves().join('-')}\n`,
+                    `isKing - ${Number(game.getActiveChecker()?.isKing ?? false)}\n`,
+                    `isWhite - ${Number(game.getActiveChecker()?.color === CheckerColor.WHITE)}`,
+                );
+                game.switchTurnToEnemy();
+            }
+            updateState(moment().format('x'));
         },
         [game, updateState, x, y],
     );
+    const canDropHandle = useCallback((item: CheckerProperty) => game.canDoMoveHere(item, x, y), [game, x, y]);
+
     const [{ isOver, canDrop }, drop] = useDrop(
         () => ({
             accept: ItemTypes.CHECKER,
-            canDrop: (item: CheckerProperty) => game.canMoveHere(item, x, y),
+            canDrop: canDropHandle,
             drop: onDropHandle,
             collect: (monitor) => ({
                 isOver: !!monitor.isOver(),
@@ -36,7 +50,6 @@ export const BoardSquare: React.FC<BoardSquareProps> = ({ x, y, children, game, 
     return (
         <div ref={drop} className={cnBoardSquare({ black })}>
             <div className={cnBoardSquare('dropZone')}>{children}</div>
-
             <div
                 className={cnBoardSquare('overlay', {
                     illegal: isOver && !canDrop,
