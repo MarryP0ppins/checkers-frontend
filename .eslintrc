@@ -12,6 +12,7 @@
         "simple-import-sort"
     ],
     "extends": [
+        "react-app",
         "prettier",
         "eslint:recommended",
         "plugin:react/recommended",
@@ -22,7 +23,8 @@
         "plugin:import/warnings",
         "plugin:import/typescript",
         "plugin:eslint-comments/recommended",
-        "plugin:react-hooks/recommended"
+        "plugin:react-hooks/recommended",
+        "plugin:eqeqeq-fix/recommended"
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -45,6 +47,7 @@
                 ]
             }
         ],
+        "eqeqeq":["error", "smart"],
         "no-unused-expressions": "error",
         "react/prop-types": "off",
         "react/display-name": "off",

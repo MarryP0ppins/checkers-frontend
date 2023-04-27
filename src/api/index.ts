@@ -70,7 +70,7 @@ api.interceptors.response.use(
     },
 );
 
-export const getApiRequest = <ResponseType>(link: string, body?: Record<string, string>): Promise<ResponseType> =>
+export const getApiRequest = <ResponseType>(link: string, body?: AxiosRequestConfig): Promise<ResponseType> =>
     api
         .get<ResponseType>(link, body)
         .then((res) => res.data)
@@ -94,7 +94,7 @@ export const postApiRequest = <ResponseType, BodyType>(link: string, body?: Body
             throw JSON.stringify(err.response?.data);
         });
 
-export const deleteApiRequest = <ResponseType>(link: string, params?: Record<string, string>): Promise<ResponseType> =>
+export const deleteApiRequest = <ResponseType>(link: string, params?: AxiosRequestConfig): Promise<ResponseType> =>
     api
         .delete<ResponseType>(link, params)
         .then((res) => res.data)

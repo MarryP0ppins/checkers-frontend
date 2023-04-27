@@ -1,7 +1,8 @@
-.rule-page {
+.profile-page {
     display: flex;
     align-items: center;
     flex-direction: column;
+
     &-back-button {
         display: flex;
         flex-direction: row;
@@ -15,13 +16,13 @@
         font-weight: bold;
     }
 
-    &-rules {
-        max-width: 1024px;
-    }
-
-    &-paragraph {
-        text-indent: 16px;
-        font-weight: normal;
-        text-align: justify;
+    &-stats {
+        width: 100%;
+        max-width: 600px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin: 20px 0;
+        font-size: larger;
     }
 }
