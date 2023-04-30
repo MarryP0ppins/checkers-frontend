@@ -3,12 +3,15 @@ import { AnyAction, CombinedState, combineReducers, configureStore, ThunkDispatc
 import { gameReducer as game } from 'store/reducers/game';
 import { loaderReducer as loader } from 'store/reducers/loader';
 import { loginReducer as login } from 'store/reducers/login';
+import { profileReducer as profile } from 'store/reducers/profile';
 import { userReducer as user } from 'store/reducers/user';
+
 const reducer = combineReducers({
     login,
     loader,
     user,
     game,
+    profile,
 });
 
 export const store = configureStore({

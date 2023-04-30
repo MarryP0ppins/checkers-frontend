@@ -9,9 +9,12 @@ import { useLoader } from 'hooks/useLoader';
 import { getGamesAction } from 'store/actions/game';
 import { getUserProfileAction } from 'store/actions/user';
 import { normalizeUserGames } from 'store/normalizers/game';
+import { resetUserState } from 'store/reducers/user';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { FetchStatus } from 'types/api';
 import { GameStatus } from 'types/game';
+
+import { PageLoader } from 'components/PageLoader';
 
 import './UserPage.scss';
 
@@ -19,20 +22,20 @@ const cnProfile = cn('profile-page');
 
 export const UserPage: React.FC = () => {
     const dispatch = useAppDispatch();
-    const { user, fetchProfileStatus } = useAppSelector((store) => store.user);
+    const { user, fetchUserProfileStatus } = useAppSelector((store) => store.user);
     const { userGames, fetchUserGamesStatus } = useAppSelector((store) => store.game);
 
-    useLoader([fetchProfileStatus, fetchUserGamesStatus]);
+    useLoader([fetchUserProfileStatus, fetchUserGamesStatus]);
 
     useEffect(() => {
-        if (fetchProfileStatus === FetchStatus.INITIAL) dispatch(getUserProfileAction());
-    }, [dispatch, fetchProfileStatus]);
+        if (fetchUserProfileStatus === FetchStatus.INITIAL) dispatch(getUserProfileAction());
+    }, [dispatch, fetchUserProfileStatus]);
 
     useEffect(() => {
         if (user && fetchUserGamesStatus === FetchStatus.INITIAL) {
             dispatch(getGamesAction({ search: user?.username, status: GameStatus.FINISHED }));
         }
-    }, [dispatch, fetchProfileStatus, fetchUserGamesStatus, user]);
+    }, [dispatch, fetchUserGamesStatus, user]);
 
     const navigate = useNavigate();
     const onReturnButtonClick = useCallback(() => {
@@ -54,6 +57,13 @@ export const UserPage: React.FC = () => {
         [],
     );
 
+    useEffect(
+        () => () => {
+            dispatch(resetUserState());
+        },
+        [dispatch],
+    );
+
     return (
         <div className={`layout ${cnProfile()}`}>
             <div className={cnProfile('back-button')}>
@@ -73,7 +83,8 @@ export const UserPage: React.FC = () => {
                 <div>{`Кол-во игр: ${user?.profile.games ?? '-'}`}</div>
                 <div>{`Очков рейтинг: ${user?.profile.rating ?? '-'}`}</div>
             </div>
-            <Paper sx={{ width: 'min-content', overflow: 'hidden', height: 400 }}>
+            <Paper sx={{ width: 'min-content', overflow: 'hidden', height: 400, position: 'relative' }}>
+                <PageLoader />
                 <DataGrid columns={columns} rows={normalizedUserGames} disableColumnSelector hideFooterPagination />
             </Paper>
         </div>

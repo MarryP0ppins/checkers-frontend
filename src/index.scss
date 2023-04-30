@@ -25,7 +25,7 @@ p {
     width: 100%;
     max-height: calc(100vh - 70px);
     min-height: calc(100vh - 70px);
-    overflow-y: auto;
+    overflow: hidden;
 }
 
 #root {

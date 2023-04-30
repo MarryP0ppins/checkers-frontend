@@ -1,9 +1,9 @@
-.rule-page {
+.rating-page {
     display: flex;
-    align-items: center;
     flex-direction: column;
-    overflow-y: auto !important;
-    gap: 12px;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 24px;
 
     &-back-button {
         display: flex;
@@ -11,20 +11,9 @@
         justify-content: flex-start;
         width: 100%;
     }
-
     &-main-title {
         font-size: 35px;
         text-decoration: underline;
         font-weight: bold;
-    }
-
-    &-rules {
-        max-width: 1024px;
-    }
-
-    &-paragraph {
-        text-indent: 16px;
-        font-weight: normal;
-        text-align: justify;
     }
 }

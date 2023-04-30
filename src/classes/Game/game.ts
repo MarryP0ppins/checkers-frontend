@@ -27,8 +27,8 @@ export class Game {
         { id: 22, x: 3, y: 5, death: false, isKing: false, color: CheckerColor.BLACK },
         { id: 23, x: 1, y: 5, death: false, isKing: false, color: CheckerColor.BLACK },
     ];
-    private playerMoves: string[] = [];
-    private enemyMoves: string[] = [];
+    private playerMoves: string[] = ['a1-f4', 'd3-a6', 'a1-f4', 'd3-a6'];
+    private enemyMoves: string[] = ['a1-f4', 'd3-a6', 'a1-f4', 'd3-a6'];
     private playerCheckersColor: CheckerColor = CheckerColor.WHITE;
     private possibleMoves: PossibleMove[] = [];
     private activeChecker: CheckerProperty | undefined;

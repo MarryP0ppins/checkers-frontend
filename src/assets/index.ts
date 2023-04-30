@@ -5,3 +5,4 @@ export { ReactComponent as CheckerWhiteIcon } from './icons/checker-white.svg';
 export { ReactComponent as LogoIcon } from './icons/logo.svg';
 export { ReactComponent as LogoutIcon } from './icons/logout.svg';
 export { ReactComponent as PreloaderArrowsIcon } from './icons/preloader-arrows.svg';
+export { default as BoardImage } from './images/board.png';

@@ -26,7 +26,7 @@ export const GamePage: React.FC = () => {
         const enemyMoves = game.getEnemyMoves();
         for (let i = 0; i < Math.max(playerMoves.length, enemyMoves.length); i++) {
             tmp.push({
-                id: i,
+                id: i + 1,
                 white: playerMoves.at(i) ?? '',
                 black: enemyMoves.at(i) ?? '',
             });
@@ -36,7 +36,7 @@ export const GamePage: React.FC = () => {
 
     const columns = useMemo<GridColDef[]>(
         () => [
-            { field: 'index', headerName: '№', sortable: false, width: 50 },
+            { field: 'id', headerName: '№', sortable: false, width: 50 },
             { field: 'white', headerName: 'Белые', sortable: false, width: 82 },
             { field: 'black', headerName: 'Черные', sortable: false, width: 82 },
         ],

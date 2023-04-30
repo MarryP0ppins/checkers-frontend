@@ -15,6 +15,7 @@ export const RulesPage: React.FC = () => {
     const onReturnButtonClick = useCallback(() => {
         navigate('/');
     }, [navigate]);
+
     return (
         <div className={`layout ${cnRule()}`}>
             <div className={cnRule('back-button')}>

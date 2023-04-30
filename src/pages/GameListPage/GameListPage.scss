@@ -1,0 +1,19 @@
+.gameList-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap:12px;
+   
+    &-buttons {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    &-main-title {
+        font-size: 35px;
+        text-decoration: underline;
+        font-weight: bold;
+    }
+}

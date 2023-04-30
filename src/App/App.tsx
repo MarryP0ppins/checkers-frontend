@@ -1,21 +1,24 @@
 import React, { useEffect } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, createRoutesFromElements, Navigate, Route, RouterProvider } from 'react-router-dom';
 import { WindowSizeContext } from 'context/WindowSizeContext';
 import { useWindowSize } from 'hooks/useWindowSize';
 import moment from 'moment';
+import { GameListPage } from 'pages/GameListPage';
 import { GamePage } from 'pages/GamePage';
 import { LogInPage } from 'pages/LogInPage';
+import { MainPage } from 'pages/MainPage';
+import { RatingPage } from 'pages/RatingPage';
 import { RegistrationPage } from 'pages/RegistrationPage';
 import { RulesPage } from 'pages/RulesPage';
 import { UserPage } from 'pages/UserPage';
 import { refreshTokensAction } from 'store/actions/login';
-import { useAppDispatch, useAppSelector } from 'store/store';
-import { FetchStatus } from 'types/api';
+import { useAppDispatch } from 'store/store';
 
+//import { FetchStatus } from 'types/api';
 import { Header } from 'components/Header';
-import { PageLoader } from 'components/PageLoader';
+//mport { PageLoader } from 'components/PageLoader';
 import { PrivateRoute } from 'components/PrivateRoute';
 
 import 'moment-timezone';
@@ -29,7 +32,7 @@ moment.tz.setDefault('Europe/Moscow');
 
 export const App: React.FC = () => {
     const dispatch = useAppDispatch();
-    const { logoutFetchStatus } = useAppSelector((store) => store.login);
+    //const { logoutFetchStatus } = useAppSelector((store) => store.login);
     const { width, height } = useWindowSize();
 
     useEffect(() => {
@@ -42,10 +45,9 @@ export const App: React.FC = () => {
                 <Route
                     path="/"
                     element={
-                        <>
-                            <Header />
-                            <div>{moment().format()}</div>
-                        </>
+                        <Header>
+                            <MainPage />
+                        </Header>
                     }
                 />
                 <Route path="login" element={<LogInPage />} />
@@ -78,6 +80,25 @@ export const App: React.FC = () => {
                         </Header>
                     }
                 />
+                <Route
+                    path="rating"
+                    element={
+                        <Header>
+                            <RatingPage />
+                        </Header>
+                    }
+                />
+                <Route
+                    path="gameList"
+                    element={
+                        <PrivateRoute>
+                            <Header>
+                                <GameListPage />
+                            </Header>
+                        </PrivateRoute>
+                    }
+                />
+                <Route path="*" element={<Navigate to="/" />} />
             </>,
         ),
     );
@@ -85,7 +106,6 @@ export const App: React.FC = () => {
     return (
         <DndProvider backend={HTML5Backend}>
             <WindowSizeContext.Provider value={{ width, height }}>
-                <PageLoader showLoading={logoutFetchStatus === FetchStatus.FETCHING} />
                 <RouterProvider router={router} />
             </WindowSizeContext.Provider>
         </DndProvider>

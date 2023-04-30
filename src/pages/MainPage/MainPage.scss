@@ -1,0 +1,20 @@
+.main-page {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 48px;
+
+    &-control {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 36px;
+    }
+
+    &-board {
+        max-width: 648px;
+        max-height: 648px;
+    }
+}
