@@ -9,6 +9,7 @@ import { useLoader } from 'hooks/useLoader';
 import { getGamesAction } from 'store/actions/game';
 import { getUserProfileAction } from 'store/actions/user';
 import { normalizeUserGames } from 'store/normalizers/game';
+import { resetGameState } from 'store/reducers/game';
 import { resetUserState } from 'store/reducers/user';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { FetchStatus } from 'types/api';
@@ -52,13 +53,22 @@ export const UserPage: React.FC = () => {
             { field: 'white', headerName: 'Белые', hideable: false, sortable: false, width: 120 },
             { field: 'black', headerName: 'Черные', hideable: false, sortable: false, width: 120 },
             { field: 'result', headerName: 'Результат', hideable: false, width: 135 },
-            { field: 'rating', headerName: 'Рейтинг', type: 'number', hideable: false, width: 125 },
+            {
+                field: 'rating',
+                headerName: 'Рейтинг',
+                type: 'number',
+                headerAlign: 'left',
+                align: 'left',
+                hideable: false,
+                width: 125,
+            },
         ],
         [],
     );
 
     useEffect(
         () => () => {
+            dispatch(resetGameState());
             dispatch(resetUserState());
         },
         [dispatch],

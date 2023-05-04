@@ -8,19 +8,24 @@ export enum GameStatus {
     IN_PROCESS = 'IN_PROCESS',
     FINISHED = 'FINISHED',
 }
+export enum WinnerStatus {
+    USER_1 = 'USER_1',
+    USER_2 = 'USER_2',
+    DRAW = 'DRAW',
+}
 
 export interface GamesResponse {
     id: number;
     user_1: UserResponse;
     user_2: UserResponse;
     user_1_turn: boolean;
-    user_1_win: boolean;
-    user_1_points: number;
-    user_2_points: number;
+    winner?: WinnerStatus;
+    user_1_points?: number;
+    user_2_points?: number;
     start_at: string;
-    finish_at: string;
-    status: GameStatus;
-    moves: { [username: string]: string[] };
+    finish_at?: string;
+    status?: GameStatus;
+    moves?: { [username: string]: string[] };
 }
 
 export interface UserGamesData {

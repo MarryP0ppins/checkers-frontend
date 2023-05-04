@@ -6,8 +6,8 @@ export interface LoginResponse {
     id: number;
     email: string;
     username: string;
-    refresh_token: string;
-    access_token: string;
+    refresh: string;
+    access: string;
 }
 
 export const fetchLoginForm = (values: AuthUser): Promise<LoginResponse | undefined> => {

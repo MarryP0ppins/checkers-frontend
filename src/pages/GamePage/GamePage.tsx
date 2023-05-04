@@ -86,8 +86,9 @@ export const GamePage: React.FC = () => {
                     <DataGrid
                         columns={columns}
                         rows={moves()}
-                        rowHeight={25}
-                        columnHeaderHeight={36}
+                        //rowHeight={25}
+                        //columnHeaderHeight={36}
+                        density="compact"
                         disableColumnMenu
                         hideFooterPagination
                         hideFooter

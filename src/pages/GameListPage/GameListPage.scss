@@ -2,8 +2,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap:12px;
-   
+    overflow-y: auto !important;
+    gap: 12px;
+
     &-buttons {
         display: flex;
         flex-direction: row;
@@ -15,5 +16,10 @@
         font-size: 35px;
         text-decoration: underline;
         font-weight: bold;
+        margin-top: 12px;;
+    }
+
+    &-dataGrid-cell {
+        font-size: 15px !important;
     }
 }

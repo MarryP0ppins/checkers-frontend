@@ -1,5 +1,4 @@
-//import moment from 'moment';
-import { GamesResponse, UserGamesData } from 'types/game';
+import { GamesResponse, UserGamesData, WinnerStatus } from 'types/game';
 import { UserResponse } from 'types/user';
 
 export const normalizeUserGames = (games: GamesResponse[], user: UserResponse): UserGamesData[] => {
@@ -11,14 +10,14 @@ export const normalizeUserGames = (games: GamesResponse[], user: UserResponse): 
             date: new Date(game.start_at),
             white: game.user_1.username,
             black: game.user_2.username,
-            result: playerIsUser1
-                ? game.user_1_win
+            result: game.winner
+                ? game.winner === WinnerStatus.DRAW
+                    ? 'Ничья'
+                    : playerIsUser1 === (game.winner === WinnerStatus.USER_1)
                     ? 'Победа'
                     : 'Поражение'
-                : !game.user_1_win
-                ? 'Поражение'
-                : 'Победа',
-            rating: playerIsUser1 ? game.user_1_points : game.user_2_points,
+                : '-',
+            rating: playerIsUser1 ? game.user_1_points ?? -1 : game.user_2_points ?? -1,
         });
     });
     return tmp;

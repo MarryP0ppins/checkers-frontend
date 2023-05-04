@@ -17,7 +17,6 @@ export const Checker: React.FC<CheckerProps> = ({ game, ...props }) => {
         const colorCheck = props.color === game.getPlayerColor();
         const canMoveOneMoreTime = game.canDoOneMoreStep();
         const hasPossibleMoves = game.hasPossibleMoves();
-        //const playerTurn = game.isPlayerTurn();
         return colorCheck && activeCheckerCheck && canMoveOneMoreTime && hasPossibleMoves;
     }, [game, props.color, props.id]);
 

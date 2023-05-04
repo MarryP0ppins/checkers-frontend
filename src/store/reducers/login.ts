@@ -44,8 +44,8 @@ const loginSlice = createSlice<LoginState, SliceCaseReducers<LoginState>>({
             state.fetchStatus = FetchStatus.FETCHED;
             state.isLoggedIn = true;
             state.tokens = {
-                access: payload?.access_token || '',
-                refresh: payload?.refresh_token || '',
+                access: payload?.access || '',
+                refresh: payload?.refresh || '',
             };
             state.user = {
                 id: payload?.id || -1,
@@ -91,6 +91,11 @@ const loginSlice = createSlice<LoginState, SliceCaseReducers<LoginState>>({
                     };
                 }
 
+                state.user = {
+                    id: payload?.id || -1,
+                    email: payload?.email || '',
+                    username: payload?.username || '',
+                };
                 state.isLoggedIn = true;
                 state.fetchStatus = FetchStatus.FETCHED;
                 localStorage.setItem('access', payload.access);

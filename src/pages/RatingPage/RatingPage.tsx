@@ -13,7 +13,6 @@ import { FetchStatus } from 'types/api';
 
 import { PageLoader } from 'components/PageLoader';
 
-//import { PageLoader } from 'components/PageLoader';
 import './RatingPage.scss';
 
 const cnRating = cn('rating-page');
@@ -33,10 +32,34 @@ export const RatingPage: React.FC = () => {
 
     const columns = useMemo<GridColDef[]>(
         () => [
-            { field: 'rating', headerName: 'Рейтинг', hideable: false, type: 'number', width: 160 },
+            {
+                field: 'rating',
+                headerName: 'Рейтинг',
+                headerAlign: 'left',
+                align: 'left',
+                hideable: false,
+                type: 'number',
+                width: 160,
+            },
             { field: 'username', headerName: 'Игрок', hideable: false, sortable: false, width: 160 },
-            { field: 'wins', headerName: 'Победы', hideable: false, type: 'number', width: 160 },
-            { field: 'games', headerName: 'Игры', hideable: false, type: 'number', width: 160 },
+            {
+                field: 'wins',
+                headerName: 'Победы',
+                headerAlign: 'left',
+                align: 'left',
+                hideable: false,
+                type: 'number',
+                width: 160,
+            },
+            {
+                field: 'games',
+                headerName: 'Игры',
+                headerAlign: 'left',
+                align: 'left',
+                hideable: false,
+                type: 'number',
+                width: 160,
+            },
         ],
         [],
     );
@@ -64,7 +87,7 @@ export const RatingPage: React.FC = () => {
                 >
                     Назад
                 </Button>
-            </div>{' '}
+            </div>
             <div className={cnRating('main-title')}>Рейтинг игроков</div>
             <Paper sx={{ width: 650, overflow: 'hidden', height: 500, position: 'relative' }}>
                 <PageLoader />

@@ -16,9 +16,7 @@ import { UserPage } from 'pages/UserPage';
 import { refreshTokensAction } from 'store/actions/login';
 import { useAppDispatch } from 'store/store';
 
-//import { FetchStatus } from 'types/api';
 import { Header } from 'components/Header';
-//mport { PageLoader } from 'components/PageLoader';
 import { PrivateRoute } from 'components/PrivateRoute';
 
 import 'moment-timezone';
@@ -32,11 +30,10 @@ moment.tz.setDefault('Europe/Moscow');
 
 export const App: React.FC = () => {
     const dispatch = useAppDispatch();
-    //const { logoutFetchStatus } = useAppSelector((store) => store.login);
     const { width, height } = useWindowSize();
 
     useEffect(() => {
-        void dispatch(refreshTokensAction());
+        dispatch(refreshTokensAction());
     }, [dispatch]);
 
     const router = createBrowserRouter(
@@ -102,7 +99,6 @@ export const App: React.FC = () => {
             </>,
         ),
     );
-
     return (
         <DndProvider backend={HTML5Backend}>
             <WindowSizeContext.Provider value={{ width, height }}>

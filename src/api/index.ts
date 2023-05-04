@@ -1,4 +1,8 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
+import { GameListData } from 'pages/GameListPage/GameListPage.types';
+import { io } from 'socket.io-client';
+import { openGamesReducer } from 'store/reducers/game';
+import { store } from 'store/store';
 
 import { getAccessToken, getRefreshToken } from 'utils/token';
 
@@ -101,3 +105,9 @@ export const deleteApiRequest = <ResponseType>(link: string, params?: AxiosReque
         .catch((err: AxiosError<Record<string, string>>) => {
             throw JSON.stringify(err.response?.data);
         });
+
+export const socket = io('ws://localhost:8080/');
+
+socket.on('open-games', (data: GameListData[]) => {
+    store.dispatch(openGamesReducer(data));
+});

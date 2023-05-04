@@ -1,6 +1,9 @@
 import { postApiRequest } from 'api';
 
 interface TokenPromise {
+    id: number;
+    username: string;
+    email: string;
     access: string;
 }
 
