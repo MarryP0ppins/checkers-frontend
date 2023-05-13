@@ -1,0 +1,97 @@
+.alert {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(196, 196, 196, 0.3);
+    overflow: hidden;
+    z-index: 9999;
+    
+    &-window {
+        height: max-content;
+        padding: 36px 10px 57px;
+        background-color: #f9fafd;
+        border: 1px solid rgba(0, 16, 61, 0.12);
+        box-sizing: border-box;
+        border-radius: 12px;
+        position: absolute;
+        left: calc(50% - 260px);
+        top: 32vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 440px;
+    }
+
+    &-info {
+        font: 600 15px/18px "Source Sans Pro";
+        margin-top: 24px;
+        text-align: center;
+        word-break: break-word;
+        color: var(--color-text-color);
+        width: 326px;
+    }
+
+    &-descriptions-wrapper {
+        font-size: 14px;
+        line-height: 1.3;
+        margin-top: 16px;
+    }
+
+    &-extra {
+        font-size: 13px;
+        line-height: 18px;
+        color: var(--color-main-black);
+
+        &-label {
+            font-family: Source Sans Pro;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 15px;
+            line-height: 18px;
+            color: var(--color-main-black);
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        &-wrapper {
+            max-height: 252px;
+            overflow-y: auto;
+            width: 100%;
+            padding: 10px 32px 0;
+
+            &::-webkit-scrollbar {
+                width: 4px;
+                background-color: #eef4fb;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                border-radius: 10px;
+                background-color: #d1ddea;
+            }
+
+            &::-webkit-scrollbar-track {
+                background-color: #eef4fb;
+            }
+        }
+    }
+
+    &-buttons {
+        margin-top: 24px;
+        display: block;
+
+        button {
+            width: 100%;
+            padding: 8px 33px;
+        }
+    }
+
+    &-close-button {
+        border: none;
+        background: none;
+        outline: none;
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        cursor: pointer;
+    }
+}

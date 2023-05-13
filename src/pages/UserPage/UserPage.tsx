@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { ArrowLeftIcon } from 'assets';
-import { useLoader } from 'hooks/useLoader';
+import { useLoader } from 'hooks';
 import { getGamesAction } from 'store/actions/game';
 import { getUserProfileAction } from 'store/actions/user';
 import { normalizeUserGames } from 'store/normalizers/game';

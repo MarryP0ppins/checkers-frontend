@@ -1,10 +1,11 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { GameListData } from 'pages/GameListPage/GameListPage.types';
-import { io } from 'socket.io-client';
-import { openGamesReducer } from 'store/reducers/game';
+import { io, Socket } from 'socket.io-client';
+import { openGamesReducer, removeOpenGamesReducer } from 'store/reducers/game';
 import { store } from 'store/store';
+import { ClientToServerEvents, ServerToClientEvents } from 'types/api';
 
-import { getAccessToken, getRefreshToken } from 'utils/token';
+import { getAccessToken, getRefreshToken } from 'utils';
 
 export const api = axios.create({
     baseURL: 'http://127.0.0.1:8000/',
@@ -106,8 +107,12 @@ export const deleteApiRequest = <ResponseType>(link: string, params?: AxiosReque
             throw JSON.stringify(err.response?.data);
         });
 
-export const socket = io('ws://localhost:8080/');
+export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io('ws://localhost:8080/');
 
-socket.on('open-games', (data: GameListData[]) => {
+socket.on('openGames', (data: GameListData[]) => {
     store.dispatch(openGamesReducer(data));
+});
+
+socket.on('removeOpenGame', (gameId: number) => {
+    store.dispatch(removeOpenGamesReducer(gameId));
 });

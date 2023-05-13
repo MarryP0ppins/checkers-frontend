@@ -24,10 +24,10 @@ const gameSlice = createSlice<GameState, SliceCaseReducers<GameState>>({
     reducers: {
         reset: () => initialState,
         openGamesReducer: (state, action: PayloadAction<GameListData[]>) => {
-            const normalizeGames = action.payload.map((game, index) => {
-                return { ...game, id: (state.openGames.at(-1)?.id ?? -1) + index + 1 };
-            });
-            state.openGames = state.openGames.concat(normalizeGames);
+            state.openGames = state.openGames.concat(action.payload);
+        },
+        removeOpenGamesReducer: (state, action: PayloadAction<number>) => {
+            state.openGames = state.openGames.filter((game) => game.id !== action.payload);
         },
     },
     extraReducers: (builder) => {
@@ -47,6 +47,6 @@ const gameSlice = createSlice<GameState, SliceCaseReducers<GameState>>({
     },
 });
 
-export const { openGamesReducer } = gameSlice.actions;
+export const { openGamesReducer, removeOpenGamesReducer } = gameSlice.actions;
 export const resetGameState = gameSlice.actions.reset as ActionCreatorWithoutPayload<string>;
 export const gameReducer = gameSlice.reducer;

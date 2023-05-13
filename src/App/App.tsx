@@ -3,7 +3,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { createBrowserRouter, createRoutesFromElements, Navigate, Route, RouterProvider } from 'react-router-dom';
 import { WindowSizeContext } from 'context/WindowSizeContext';
-import { useWindowSize } from 'hooks/useWindowSize';
+import { useWindowSize } from 'hooks';
 import moment from 'moment';
 import { GameListPage } from 'pages/GameListPage';
 import { GamePage } from 'pages/GamePage';

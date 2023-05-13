@@ -3,5 +3,14 @@ export interface GameListData {
     userId: number;
     username: string;
     rating: number;
-    uuid: string;
+}
+
+export interface CreateGameRequest {
+    userId: number;
+    username: string;
+    rating: number;
+}
+
+export interface JoinGameRequest {
+    gameId: number;
 }

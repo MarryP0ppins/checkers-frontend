@@ -1,7 +1,7 @@
 import { api } from 'api';
 import { AxiosError, AxiosResponse } from 'axios';
 
-import { getRefreshToken } from 'utils/token';
+import { getRefreshToken } from 'utils';
 
 export const postLogoutRequest = (): Promise<unknown> | undefined => {
     const refresh = getRefreshToken();
