@@ -7,6 +7,7 @@ import { Game } from 'classes/Game/game';
 import { CheckerColor } from 'classes/Game/game.types';
 import { useWindowSizeContext } from 'context/WindowSizeContext';
 import { MovesTableRow } from 'pages/GamePage/GamePage.types';
+import { useAppSelector } from 'store/store';
 
 import { GameBoard } from 'components/GameBoard';
 
@@ -15,6 +16,7 @@ import './GamePage.scss';
 const cnGame = cn('game-page');
 
 export const GamePage: React.FC = () => {
+    const { user } = useAppSelector((store) => store.login);
     const game = useMemo(() => new Game({ playerCheckersColor: CheckerColor.BLACK }), []);
     const [state, updateState] = useState<string>();
     const { height } = useWindowSizeContext();
@@ -45,7 +47,7 @@ export const GamePage: React.FC = () => {
 
     return (
         <div className={`layout ${cnGame()}`}>
-            <GameBoard game={game} state={state} updateState={updateState} size={height - 136} />
+            <GameBoard game={game} state={state} updateState={updateState} size={height - 136} user={user} />
             <div className={cnGame('killed-checkers')} style={{ height: height - 136 }}>
                 <div className={cnGame('stack')}>
                     {[

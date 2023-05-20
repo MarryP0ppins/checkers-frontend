@@ -8,14 +8,14 @@
     
     &-window {
         height: max-content;
-        padding: 36px 10px 57px;
+        padding: 36px 10px;
         background-color: #f9fafd;
         border: 1px solid rgba(0, 16, 61, 0.12);
         box-sizing: border-box;
         border-radius: 12px;
         position: absolute;
-        left: calc(50% - 260px);
-        top: 32vh;
+        left: calc(50% - 220px);
+        top: 28vh;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -23,7 +23,8 @@
     }
 
     &-info {
-        font: 600 15px/18px "Source Sans Pro";
+        font-weight: 600;
+        font-size: 15px;
         margin-top: 24px;
         text-align: center;
         word-break: break-word;
@@ -43,7 +44,6 @@
         color: var(--color-main-black);
 
         &-label {
-            font-family: Source Sans Pro;
             font-style: normal;
             font-weight: 600;
             font-size: 15px;

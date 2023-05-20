@@ -11,7 +11,7 @@ import './GameBoard.scss';
 
 const cnGameBoard = cn('game-board');
 
-export const GameBoard: React.FC<GameBoardProps> = ({ game, state, updateState, size }) => {
+export const GameBoard: React.FC<GameBoardProps> = ({ game, state, updateState, size, user }) => {
     const [,] = useState<string | undefined>(state);
 
     return (
@@ -22,7 +22,15 @@ export const GameBoard: React.FC<GameBoardProps> = ({ game, state, updateState, 
                 const y = playerColor === CheckerColor.WHITE ? 7 - Math.floor(squareId / 8) : Math.floor(squareId / 8);
                 const checker = game.isSomeOneHere(x, y);
                 return (
-                    <BoardSquare key={index} x={x} y={y} index={squareId} game={game} updateState={updateState}>
+                    <BoardSquare
+                        key={index}
+                        x={x}
+                        y={y}
+                        index={squareId}
+                        game={game}
+                        updateState={updateState}
+                        userId={user?.id ?? -1}
+                    >
                         {(playerColor === CheckerColor.WHITE ? x === 0 : x === 7) && (
                             <div className={cnGameBoard('y-axis')}>{y + 1}</div>
                         )}

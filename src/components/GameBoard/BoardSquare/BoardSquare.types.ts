@@ -7,5 +7,6 @@ export interface BoardSquareProps {
     y: number;
     game: Game;
     index: number;
+    userId:number;
     updateState: Dispatch<SetStateAction<string | undefined>>;
 }

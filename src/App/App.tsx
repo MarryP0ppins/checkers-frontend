@@ -16,8 +16,7 @@ import { UserPage } from 'pages/UserPage';
 import { refreshTokensAction } from 'store/actions/login';
 import { useAppDispatch } from 'store/store';
 
-import { Header } from 'components/Header';
-import { PrivateRoute } from 'components/PrivateRoute';
+import { RouteComponent } from 'components/RouteComponent';
 
 import 'moment-timezone';
 import 'moment/locale/ru';
@@ -39,62 +38,14 @@ export const App: React.FC = () => {
     const router = createBrowserRouter(
         createRoutesFromElements(
             <>
-                <Route
-                    path="/"
-                    element={
-                        <Header>
-                            <MainPage />
-                        </Header>
-                    }
-                />
-                <Route path="login" element={<LogInPage />} />
-                <Route path="registration" element={<RegistrationPage />} />
-                <Route
-                    path="profile"
-                    element={
-                        <PrivateRoute>
-                            <Header>
-                                <UserPage />
-                            </Header>
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path="game"
-                    element={
-                        <PrivateRoute>
-                            <Header>
-                                <GamePage />
-                            </Header>
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path="rules"
-                    element={
-                        <Header>
-                            <RulesPage />
-                        </Header>
-                    }
-                />
-                <Route
-                    path="rating"
-                    element={
-                        <Header>
-                            <RatingPage />
-                        </Header>
-                    }
-                />
-                <Route
-                    path="gameList"
-                    element={
-                        <PrivateRoute>
-                            <Header>
-                                <GameListPage />
-                            </Header>
-                        </PrivateRoute>
-                    }
-                />
+                <Route path="/" element={<RouteComponent page={<MainPage />} withHeader />} />
+                <Route path="login" element={<RouteComponent page={<LogInPage />} />} />
+                <Route path="registration" element={<RouteComponent page={<RegistrationPage />} />} />
+                <Route path="profile" element={<RouteComponent page={<UserPage />} withHeader privateRoute />} />
+                <Route path="game" element={<RouteComponent page={<GamePage />} withHeader privateRoute />} />
+                <Route path="rules" element={<RouteComponent page={<RulesPage />} withHeader />} />
+                <Route path="rating" element={<RouteComponent page={<RatingPage />} withHeader />} />
+                <Route path="gameList" element={<RouteComponent page={<GameListPage />} withHeader privateRoute />} />
                 <Route path="*" element={<Navigate to="/" />} />
             </>,
         ),

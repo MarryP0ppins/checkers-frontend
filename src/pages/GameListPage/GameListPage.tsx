@@ -27,7 +27,7 @@ export const GameListPage: React.FC = () => {
     const navigate = useNavigate();
 
     const { user, fetchUserProfileStatus } = useAppSelector((store) => store.user);
-    const { openGames, userGames } = useAppSelector((store) => store.game);
+    const { openGames } = useAppSelector((store) => store.game);
 
     useLoader([fetchUserProfileStatus]);
 
@@ -80,13 +80,13 @@ export const GameListPage: React.FC = () => {
                     size="large"
                     variant="contained"
                     onClick={connectToGame(rowData.id)}
-                    disabled={userGames.length > 0}
+                    disabled={startGameData.length > 0}
                 >
                     Присоединиться
                 </Button>
             );
         },
-        [connectToGame, userGames.length],
+        [connectToGame],
     );
 
     const createdGamesColumns = useMemo<GridColDef[]>(
@@ -190,12 +190,12 @@ export const GameListPage: React.FC = () => {
                     size="large"
                     variant="contained"
                     onClick={createGameButtonClick}
-                    disabled={userGames.length > 0}
+                    disabled={startGameData.length > 0}
                 >
                     Создать игру
                 </Button>
             </div>
-            {Boolean(userGames.length) && (
+            {Boolean(startGameData.length) && (
                 <>
                     <div className={cnGameList('main-title')}>Начатая игра</div>
                     <Paper

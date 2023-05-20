@@ -31,7 +31,6 @@ export const Alert: React.FC = () => {
 
     const handleActionButtonClick = useCallback(() => {
         dispatch(clearError());
-
         if (actionButtonClick) {
             return actionButtonClick();
         }
@@ -40,7 +39,6 @@ export const Alert: React.FC = () => {
             return navigate(-1);
         }
 
-        document.location.reload();
     }, [actionButtonClick, dispatch, isFrontend, navigate]);
 
     const handleModalClose = useCallback(() => {
@@ -96,7 +94,7 @@ export const Alert: React.FC = () => {
                             </div>
                         )}
                         <button className={CnAlert('close-button')} onClick={handleModalClose}>
-                            <CloseIcon />
+                            <CloseIcon height={30} width={30} />
                         </button>
                     </div>
                 </div>
