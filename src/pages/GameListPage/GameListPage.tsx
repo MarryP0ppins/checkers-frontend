@@ -44,12 +44,12 @@ export const GameListPage: React.FC = () => {
         if (user) {
             socket.emit(
                 'createGameRequest',
-                {
+                {                                   //message
                     userId: user.id,
                     username: user.username,
                     rating: user.profile.rating,
                 },
-                ({ gameId }) => console.log(gameId),
+                ({ gameId }) => console.log(gameId), //callback
             );
         }
     }, [user]);
