@@ -17,7 +17,11 @@ const cnGame = cn('game-page');
 
 export const GamePage: React.FC = () => {
     const { user } = useAppSelector((store) => store.login);
-    const game = useMemo(() => new Game({ playerCheckersColor: CheckerColor.BLACK }), []);
+    const { currentGameId } = useAppSelector((store) => store.game);
+    const game = useMemo(
+        () => new Game({ playerCheckersColor: CheckerColor.BLACK, gameId: currentGameId ?? -1 }),
+        [currentGameId],
+    );
     const [state, updateState] = useState<string>();
     const { height } = useWindowSizeContext();
     const playerColorWhite = game.getPlayerColor() === CheckerColor.WHITE;

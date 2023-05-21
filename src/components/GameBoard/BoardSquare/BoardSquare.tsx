@@ -18,7 +18,7 @@ export const BoardSquare: React.FC<BoardSquareProps> = ({ x, y, children, game, 
             if (!game.hasPossibleMoves()) {
                 //Здесь будет отправка данных о совершенном ходе
                 console.log(
-                    ` gameId - ${'undefined'}\n`,
+                    `gameId - ${game.getGameId()}\n`,
                     `playerId - ${userId}\n`,
                     `checkerId - ${game.getActiveChecker()?.id ?? -1}\n`,
                     `newPositions - ${game.getActiveCheckerMoves().join('-')}\n`,

@@ -36,8 +36,10 @@ export class Game {
     private canMoveOneMoreTime = true;
     private checkersToKill: number[] = [];
     private playerTurn = false;
+    private gameId: number;
 
     constructor(value: GameConstructorProps) {
+        this.gameId = value.gameId;
         this.playerCheckersColor = value.playerCheckersColor;
         value.checkersProperties?.forEach((property) => (this.checkersProperties[property.id] = { ...property }));
         this.playerTurn = value.playerCheckersColor === CheckerColor.WHITE;
@@ -50,6 +52,10 @@ export class Game {
         }
     }
 
+    public getGameId(): number {
+        return this.gameId;
+    }
+    
     public getPlayerColor(): CheckerColor {
         return this.playerCheckersColor;
     }

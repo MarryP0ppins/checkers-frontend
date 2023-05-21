@@ -6,14 +6,13 @@ import Paper from '@mui/material/Paper';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { ArrowLeftIcon } from 'assets';
 import { useLoader } from 'hooks';
-import { getGamesAction } from 'store/actions/game';
+import { getUserGamesAction } from 'store/actions/game';
 import { getUserProfileAction } from 'store/actions/user';
 import { normalizeUserGames } from 'store/normalizers/game';
 import { resetGameState } from 'store/reducers/game';
 import { resetUserState } from 'store/reducers/user';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { FetchStatus } from 'types/api';
-import { GameStatus } from 'types/game';
 
 import { PageLoader } from 'components/PageLoader';
 
@@ -34,7 +33,7 @@ export const UserPage: React.FC = () => {
 
     useEffect(() => {
         if (user && fetchUserGamesStatus === FetchStatus.INITIAL) {
-            dispatch(getGamesAction({ search: user?.username, status: GameStatus.FINISHED }));
+            dispatch(getUserGamesAction(user?.username));
         }
     }, [dispatch, fetchUserGamesStatus, user]);
 

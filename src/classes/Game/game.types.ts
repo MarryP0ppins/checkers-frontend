@@ -20,6 +20,7 @@ export interface PossibleMove {
 
 export interface GameConstructorProps {
     playerCheckersColor: CheckerColor;
+    gameId:number;
     checkersProperties?: CheckerProperty[];
     playerMoves?: string[];
     enemyMoves?: string[];

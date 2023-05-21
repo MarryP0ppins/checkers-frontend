@@ -8,11 +8,10 @@ import { socket } from 'api';
 import { ArrowLeftIcon } from 'assets';
 import { useLoader } from 'hooks';
 import { GameListData } from 'pages/GameListPage/GameListPage.types';
-import { getGamesAction } from 'store/actions/game';
 import { getUserProfileAction } from 'store/actions/user';
-import { useAppDispatch, useAppSelector } from 'store/store';
+import { setGameId } from 'store/reducers/game';
+import { store, useAppDispatch, useAppSelector } from 'store/store';
 import { FetchStatus } from 'types/api';
-import { GameStatus } from 'types/game';
 
 import { PageLoader } from 'components/PageLoader';
 
@@ -37,12 +36,6 @@ export const GameListPage: React.FC = () => {
         }
     }, [dispatch, fetchUserProfileStatus, user]);
 
-    useEffect(() => {
-        if (user) {
-            dispatch(getGamesAction({ search: user.username, status: GameStatus.IN_PROCESS }));
-        }
-    }, [dispatch, user]);
-
     const onReturnButtonClick = useCallback(() => {
         navigate('/');
     }, [navigate]);
@@ -63,6 +56,7 @@ export const GameListPage: React.FC = () => {
 
     const connectToGame = useCallback(
         (tabIndex: number) => () => {
+            store.dispatch(setGameId(tabIndex));
             socket.emit('joinGame', {
                 gameId: tabIndex,
             });
