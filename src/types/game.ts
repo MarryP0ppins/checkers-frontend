@@ -36,3 +36,12 @@ export interface UserGamesData {
     result: string;
     rating: number;
 }
+
+export interface PlayerMakeMoveRequest {
+    game_id: number;
+    user_id: number;
+    checker_id: number;
+    new_positions: string[];
+    is_king: boolean;
+    is_white: boolean;
+}

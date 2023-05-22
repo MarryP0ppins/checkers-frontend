@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { useDrop } from 'react-dnd';
 import { cn } from '@bem-react/classname';
+import { socket } from 'api';
 import { CheckerColor, CheckerProperty } from 'classes/Game/game.types';
 import moment from 'moment';
 import { ItemTypes } from 'types/game';
@@ -17,14 +18,15 @@ export const BoardSquare: React.FC<BoardSquareProps> = ({ x, y, children, game, 
             game.moveAndKillChecker(item.id, x, y);
             if (!game.hasPossibleMoves()) {
                 //Здесь будет отправка данных о совершенном ходе
-                console.log(
-                    `gameId - ${game.getGameId()}\n`,
-                    `playerId - ${userId}\n`,
-                    `checkerId - ${game.getActiveChecker()?.id ?? -1}\n`,
-                    `newPositions - ${game.getActiveCheckerMoves().join('-')}\n`,
-                    `isKing - ${Number(game.getActiveChecker()?.isKing ?? false)}\n`,
-                    `isWhite - ${Number(game.getActiveChecker()?.color === CheckerColor.WHITE)}`,
-                );
+                socket.emit('playerMakeMove',
+                {
+                    game_id: game.getGameId(),
+                    user_id: userId,
+                    checker_id: game.getActiveChecker()?.id ?? -1,
+                    new_positions: game.getActiveCheckerMoves(),
+                    is_king: game.getActiveChecker()?.isKing ?? false,
+                    is_white: game.getActiveChecker()?.color === CheckerColor.WHITE 
+                });                
                 game.switchTurnToEnemy();
             }
             updateState(moment().format('x'));
