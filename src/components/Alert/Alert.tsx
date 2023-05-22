@@ -38,7 +38,6 @@ export const Alert: React.FC = () => {
         if (isFrontend) {
             return navigate(-1);
         }
-
     }, [actionButtonClick, dispatch, isFrontend, navigate]);
 
     const handleModalClose = useCallback(() => {
@@ -73,7 +72,7 @@ export const Alert: React.FC = () => {
                         {customDescription && customDescription.length > 0 && (
                             <div className={CnAlert('descriptions-wrapper')}>{customDescription}</div>
                         )}
-                        {extraInfo && (
+                        {extraInfo && !customDescription && (
                             <React.Fragment key={'extra'}>
                                 <div className={CnAlert('extra-label')}>Подробнее:</div>
                                 <div className={CnAlert('extra-wrapper')}>

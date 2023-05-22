@@ -10,7 +10,7 @@ import { useLoader } from 'hooks';
 import { GameListData } from 'pages/GameListPage/GameListPage.types';
 import { getUserProfileAction } from 'store/actions/user';
 import { setGameId } from 'store/reducers/game';
-import { store, useAppDispatch, useAppSelector } from 'store/store';
+import { useAppDispatch, useAppSelector } from 'store/store';
 import { FetchStatus } from 'types/api';
 
 import { PageLoader } from 'components/PageLoader';
@@ -49,19 +49,21 @@ export const GameListPage: React.FC = () => {
                     username: user.username,
                     rating: user.profile.rating,
                 },
-                ({ gameId }) => console.log(gameId),
+                (gameId) => {
+                    dispatch(setGameId(gameId));
+                },
             );
         }
-    }, [user]);
+    }, [dispatch, user]);
 
     const connectToGame = useCallback(
         (tabIndex: number) => () => {
-            store.dispatch(setGameId(tabIndex));
+            dispatch(setGameId(tabIndex));
             socket.emit('joinGame', {
                 gameId: tabIndex,
             });
         },
-        [],
+        [dispatch],
     );
 
     const renderCreateGamesGridCell = useCallback(
@@ -114,57 +116,6 @@ export const GameListPage: React.FC = () => {
         [renderCreateGamesGridCell],
     );
 
-    const renderStartGameGridCell = useCallback(
-        (props: GridRenderCellParams) => {
-            const rowData = props.row as GameListData;
-            return (
-                <Button
-                    sx={{ backgroundColor: '#fff' }}
-                    color="inherit"
-                    size="large"
-                    variant="contained"
-                    onClick={connectToGame(rowData.id)}
-                >
-                    Присоединиться
-                </Button>
-            );
-        },
-        [connectToGame],
-    );
-
-    const startedGameColumns = useMemo<GridColDef[]>(
-        () => [
-            {
-                field: 'username',
-                headerName: 'Игрок',
-                cellClassName: cnGameList('dataGrid-cell'),
-                headerClassName: cnGameList('dataGrid-cell'),
-                sortable: false,
-                width: 180,
-            },
-            {
-                field: 'rating',
-                headerName: 'Рейтинг',
-                cellClassName: cnGameList('dataGrid-cell'),
-                headerClassName: cnGameList('dataGrid-cell'),
-                sortable: false,
-                align: 'left',
-                headerAlign: 'left',
-                type: 'number',
-                width: 180,
-            },
-            {
-                field: '',
-                headerName: '',
-                renderCell: renderStartGameGridCell,
-                width: 180,
-                disableColumnMenu: true,
-                sortable: false,
-            },
-        ],
-        [renderStartGameGridCell],
-    );
-
     return (
         <div className={`layout ${cnGameList()}`}>
             <PageLoader />
@@ -189,31 +140,6 @@ export const GameListPage: React.FC = () => {
                     Создать игру
                 </Button>
             </div>
-            {Boolean(startGameData.length) && (
-                <>
-                    <div className={cnGameList('main-title')}>Начатая игра</div>
-                    <Paper
-                        sx={{
-                            width: 'min-content',
-                            overflow: 'hidden',
-                            minHeight: 110,
-                            height: 110,
-                            position: 'relative',
-                        }}
-                    >
-                        <DataGrid
-                            columns={startedGameColumns}
-                            rows={startGameData}
-                            disableColumnMenu
-                            disableColumnFilter
-                            disableColumnSelector
-                            hideFooterPagination
-                            disableRowSelectionOnClick
-                            hideFooter
-                        />
-                    </Paper>
-                </>
-            )}
             <div className={cnGameList('main-title')}>Доступные игры</div>
             <Paper sx={{ width: 'min-content', overflow: 'hidden', height: 400, minHeight: 400, position: 'relative' }}>
                 <DataGrid

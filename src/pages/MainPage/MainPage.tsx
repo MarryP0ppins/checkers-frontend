@@ -25,7 +25,7 @@ export const MainPage: React.FC = () => {
     }, [navigate]);
 
     const navigateToGameListPage = useCallback(() => {
-        navigate('/gameList');
+        navigate('/game-list');
     }, [navigate]);
 
     return (

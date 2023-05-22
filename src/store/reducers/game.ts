@@ -5,7 +5,7 @@ import { FetchStatus } from 'types/api';
 import { GamesResponse } from 'types/game';
 
 export interface GameState {
-    currentGameId: number | null;
+    currentGameId: number | undefined;
     currentGame: GamesResponse | null;
     userGames: GamesResponse[];
     fetchUserGamesStatus: FetchStatus;
@@ -15,7 +15,7 @@ export interface GameState {
 }
 
 const initialState: GameState = {
-    currentGameId: null,
+    currentGameId: undefined,
     fetchUserGamesStatus: FetchStatus.INITIAL,
     fetchCurrentGamesStatus: FetchStatus.INITIAL,
     currentGame: null,
@@ -48,7 +48,7 @@ const gameSlice = createSlice<GameState, SliceCaseReducers<GameState>>({
             .addCase(getCurrentGameAction.fulfilled, (state, { payload }) => {
                 state.fetchCurrentGamesStatus = FetchStatus.FETCHED;
                 state.currentGame = payload[0];
-                state.currentGameId = payload[0].id;
+                state.currentGameId = payload[0]?.id;
             })
             .addCase(getCurrentGameAction.rejected, (state, { error }) => {
                 state.fetchCurrentGamesStatus = FetchStatus.ERROR;

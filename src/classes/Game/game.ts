@@ -55,7 +55,7 @@ export class Game {
     public getGameId(): number {
         return this.gameId;
     }
-    
+
     public getPlayerColor(): CheckerColor {
         return this.playerCheckersColor;
     }
