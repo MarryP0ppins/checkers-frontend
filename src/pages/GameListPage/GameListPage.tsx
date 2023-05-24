@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@bem-react/classname';
 import Button from '@mui/material/Button';
@@ -53,6 +53,7 @@ export const GameListPage: React.FC = () => {
             );
         }
     }, [user]);
+
 
     const connectToGame = useCallback(
         (tabIndex: number) => () => {
