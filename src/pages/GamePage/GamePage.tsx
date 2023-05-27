@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { cn } from '@bem-react/classname';
 import Paper from '@mui/material/Paper';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
@@ -6,7 +6,6 @@ import { CheckerWhiteIcon } from 'assets';
 import { Game } from 'classes/Game/game';
 import { CheckerColor } from 'classes/Game/game.types';
 import { useWindowSizeContext } from 'context/WindowSizeContext';
-import { MovesTableRow } from 'pages/GamePage/GamePage.types';
 import { useAppSelector } from 'store/store';
 
 import { GameBoard } from 'components/GameBoard';
@@ -18,27 +17,19 @@ const cnGame = cn('game-page');
 export const GamePage: React.FC = () => {
     const { user } = useAppSelector((store) => store.login);
     const { currentGameId } = useAppSelector((store) => store.game);
+    const { lastMoves, gameMoves } = useAppSelector((store) => store.move);
     const game = useMemo(
-        () => new Game({ playerCheckersColor: CheckerColor.BLACK, gameId: currentGameId ?? -1 }),
-        [currentGameId],
+        () =>
+            new Game({
+                playerCheckersColor: CheckerColor.BLACK,
+                gameId: currentGameId ?? -1,
+                checkersProperties: lastMoves,
+            }),
+        [currentGameId, lastMoves],
     );
     const [state, updateState] = useState<string>();
     const { height } = useWindowSizeContext();
     const playerColorWhite = game.getPlayerColor() === CheckerColor.WHITE;
-
-    const moves = useCallback(() => {
-        const tmp: MovesTableRow[] = [];
-        const playerMoves = game.getPlayerMoves();
-        const enemyMoves = game.getEnemyMoves();
-        for (let i = 0; i < Math.max(playerMoves.length, enemyMoves.length); i++) {
-            tmp.push({
-                id: i + 1,
-                white: playerMoves.at(i) ?? '',
-                black: enemyMoves.at(i) ?? '',
-            });
-        }
-        return tmp;
-    }, [game]);
 
     const columns = useMemo<GridColDef[]>(
         () => [
@@ -91,7 +82,7 @@ export const GamePage: React.FC = () => {
                 <Paper sx={{ width: 250, overflow: 'hidden', height: 400 }}>
                     <DataGrid
                         columns={columns}
-                        rows={moves()}
+                        rows={gameMoves}
                         //rowHeight={25}
                         //columnHeaderHeight={36}
                         density="compact"

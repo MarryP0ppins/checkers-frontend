@@ -15,6 +15,7 @@ import { RulesPage } from 'pages/RulesPage';
 import { UserPage } from 'pages/UserPage';
 import { getCurrentGameAction } from 'store/actions/game';
 import { refreshTokensAction } from 'store/actions/login';
+import { getMovesAction } from 'store/actions/move';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { FetchStatus } from 'types/api';
 
@@ -34,7 +35,8 @@ export const App: React.FC = () => {
     const { width, height } = useWindowSize();
     const { user } = useAppSelector((store) => store.login);
     const { currentGameId, fetchCurrentGamesStatus } = useAppSelector((store) => store.game);
-    useLoader([fetchCurrentGamesStatus]);
+    const { fetchGameMovesStatus } = useAppSelector((store) => store.move);
+    useLoader([fetchCurrentGamesStatus, fetchGameMovesStatus]);
 
     useEffect(() => {
         dispatch(refreshTokensAction());
@@ -45,6 +47,12 @@ export const App: React.FC = () => {
             dispatch(getCurrentGameAction(user.username));
         }
     }, [dispatch, fetchCurrentGamesStatus, user]);
+
+    useEffect(() => {
+        if (currentGameId && fetchGameMovesStatus === FetchStatus.INITIAL) {
+            dispatch(getMovesAction({ game: currentGameId }));
+        }
+    }, [currentGameId, dispatch, fetchGameMovesStatus]);
 
     const router = createBrowserRouter(
         createRoutesFromElements(

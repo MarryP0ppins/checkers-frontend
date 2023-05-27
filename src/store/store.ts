@@ -4,6 +4,7 @@ import { errorReducer as error } from 'store/reducers/error';
 import { gameReducer as game } from 'store/reducers/game';
 import { loaderReducer as loader } from 'store/reducers/loader';
 import { loginReducer as login } from 'store/reducers/login';
+import { moveReducer as move } from 'store/reducers/move';
 import { profileReducer as profile } from 'store/reducers/profile';
 import { userReducer as user } from 'store/reducers/user';
 
@@ -14,6 +15,7 @@ const reducer = combineReducers({
     user,
     game,
     profile,
+    move,
 });
 
 export const store = configureStore({

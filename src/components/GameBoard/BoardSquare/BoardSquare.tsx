@@ -21,9 +21,11 @@ export const BoardSquare: React.FC<BoardSquareProps> = ({ x, y, children, game, 
                     `gameId - ${game.getGameId()}\n`,
                     `playerId - ${userId}\n`,
                     `checkerId - ${game.getActiveChecker()?.id ?? -1}\n`,
-                    `newPositions - ${game.getActiveCheckerMoves().join('-')}\n`,
+                    `startPosition - ${game.getActiveCheckerStartPosition()}\n`,
+                    `newPositions - ${game.getActiveCheckerMoves().join(',')}\n`,
                     `isKing - ${Number(game.getActiveChecker()?.isKing ?? false)}\n`,
-                    `isWhite - ${Number(game.getActiveChecker()?.color === CheckerColor.WHITE)}`,
+                    `isWhite - ${Number(game.getActiveChecker()?.color === CheckerColor.WHITE)}\n`,
+                    `killed - ${game.getCheckersToKill().join(',')}`,
                 );
                 game.switchTurnToEnemy();
             }

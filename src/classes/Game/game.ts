@@ -1,4 +1,6 @@
 import { CheckerColor, CheckerProperty, GameConstructorProps, PossibleMove } from 'classes/Game/game.types';
+import { newMove } from 'store/reducers/move';
+import { store } from 'store/store';
 
 export class Game {
     private checkersProperties: CheckerProperty[] = [
@@ -27,12 +29,12 @@ export class Game {
         { id: 22, x: 3, y: 5, death: false, isKing: false, color: CheckerColor.BLACK },
         { id: 23, x: 1, y: 5, death: false, isKing: false, color: CheckerColor.BLACK },
     ];
-    private playerMoves: string[] = ['a1-f4', 'd3-a6', 'a1-f4', 'd3-a6'];
-    private enemyMoves: string[] = ['a1-f4', 'd3-a6', 'a1-f4', 'd3-a6'];
+
     private playerCheckersColor: CheckerColor = CheckerColor.WHITE;
     private possibleMoves: PossibleMove[] = [];
     private activeChecker: CheckerProperty | undefined;
     private activeCheckerMoves: string[] = [];
+    private activeCheckerStartPosition = '';
     private canMoveOneMoreTime = true;
     private checkersToKill: number[] = [];
     private playerTurn = false;
@@ -76,14 +78,6 @@ export class Game {
         return this.checkersProperties.filter((checker) => checker.color === color && checker.death).length;
     }
 
-    public getPlayerMoves(): string[] {
-        return this.playerMoves;
-    }
-
-    public getEnemyMoves(): string[] {
-        return this.enemyMoves;
-    }
-
     public isPlayerTurn(): boolean {
         return this.playerTurn;
     }
@@ -91,6 +85,15 @@ export class Game {
     public getActiveCheckerMoves(): string[] {
         return this.activeCheckerMoves;
     }
+
+    public getActiveCheckerStartPosition(): string {
+        return this.activeCheckerStartPosition;
+    }
+
+    public getCheckersToKill(): number[] {
+        return this.checkersToKill;
+    }
+
     /**
      * Для обновления состояния игры после хода соперника
      */
@@ -197,7 +200,10 @@ export class Game {
             const move = `${String.fromCharCode(this.activeChecker.x + 97)}${this.activeChecker.y + 1}${
                 this.activeCheckerMoves.length > 1 ? ':' : '-'
             }${String.fromCharCode(toX + 97)}${toY + 1}`;
-            this.playerMoves.push(move);
+            store.dispatch(newMove({ color: this.playerCheckersColor, newMove: move }));
+            this.activeCheckerStartPosition = `${String.fromCharCode(this.activeChecker.x + 97)}${
+                this.activeChecker.y + 1
+            }`;
         }
     }
 
