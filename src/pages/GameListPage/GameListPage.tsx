@@ -9,7 +9,6 @@ import { ArrowLeftIcon } from 'assets';
 import { useLoader } from 'hooks';
 import { GameListData } from 'pages/GameListPage/GameListPage.types';
 import { getUserProfileAction } from 'store/actions/user';
-import { setGameId } from 'store/reducers/game';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { FetchStatus } from 'types/api';
 
@@ -48,22 +47,16 @@ export const GameListPage: React.FC = () => {
                     userId: user.id,
                     username: user.username,
                     rating: user.profile.rating,
-                },
-                (gameId) => {
-                    dispatch(setGameId(gameId));
-                },
+                }
             );
         }
-    }, [dispatch, user]);
+    }, [user]);
 
     const connectToGame = useCallback(
-        (tabIndex: number) => () => {
-            dispatch(setGameId(tabIndex));
-            socket.emit('joinGame', {
-                gameId: tabIndex,
-            });
+        (socketId: string) => () => {
+            socket.emit('joinGame', socketId);
         },
-        [dispatch],
+        [],
     );
 
     const renderCreateGamesGridCell = useCallback(
@@ -75,7 +68,7 @@ export const GameListPage: React.FC = () => {
                     color="inherit"
                     size="large"
                     variant="contained"
-                    onClick={connectToGame(rowData.id)}
+                    onClick={connectToGame(rowData.socketId)}
                     disabled={startGameData.length > 0}
                 >
                     Присоединиться

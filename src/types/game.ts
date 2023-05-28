@@ -16,8 +16,8 @@ export enum WinnerStatus {
 
 export interface GamesResponse {
     id: number;
-    user_1: UserResponse;
-    user_2: UserResponse;
+    user_1_info: UserResponse;
+    user_2_info: UserResponse;
     user_1_turn: boolean;
     winner?: WinnerStatus;
     user_1_points?: number;

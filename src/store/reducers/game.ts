@@ -32,8 +32,8 @@ const gameSlice = createSlice<GameState, SliceCaseReducers<GameState>>({
         openGamesReducer: (state, action: PayloadAction<GameListData[]>) => {
             state.openGames = state.openGames.concat(action.payload);
         },
-        removeOpenGamesReducer: (state, action: PayloadAction<number>) => {
-            state.openGames = state.openGames.filter((game) => game.id !== action.payload);
+        removeOpenGamesReducer: (state, action: PayloadAction<string>) => {
+            state.openGames = state.openGames.filter((game) => game.socketId !== action.payload);
         },
         setGameId: (state, action: PayloadAction<number>) => {
             state.currentGameId = action.payload;

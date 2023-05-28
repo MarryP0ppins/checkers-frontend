@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { CheckerColor } from 'classes/Game/game.types';
 import { io, Socket } from 'socket.io-client';
-import { openGamesReducer, removeOpenGamesReducer } from 'store/reducers/game';
+import { openGamesReducer, removeOpenGamesReducer, setGameId } from 'store/reducers/game';
 import { newMove } from 'store/reducers/move';
 import { store } from 'store/store';
 import { ClientToServerEvents, ServerToClientEvents } from 'types/api';
@@ -114,11 +114,15 @@ socket.on('openGames', (data) => {
     store.dispatch(openGamesReducer(data));
 });
 
-socket.on('removeOpenGame', (gameId) => {
-    store.dispatch(removeOpenGamesReducer(gameId));
+socket.on('removeOpenGame', (socketId) => {
+    store.dispatch(removeOpenGamesReducer(socketId));
 });
 
 socket.on('enemyMove', (data) => {
     const move = `${data.startPosition}${data.newPositions.length > 1 ? ':' : '-'}${data.newPositions.at(-1) ?? ''}`;
     store.dispatch(newMove({ color: data.isWhite ? CheckerColor.WHITE : CheckerColor.BLACK, newMove: move }));
+});
+
+socket.on('gameStart', (gameId) => {
+    store.dispatch(setGameId(gameId));
 });
