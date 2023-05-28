@@ -2,10 +2,9 @@ import { ActionCreatorWithoutPayload, createSlice, PayloadAction, SliceCaseReduc
 import { GameListData } from 'pages/GameListPage/GameListPage.types';
 import { getCurrentGameAction, getUserGamesAction } from 'store/actions/game';
 import { FetchStatus } from 'types/api';
-import { GamesResponse } from 'types/game';
+import { GamesResponse, GameStartProps } from 'types/game';
 
 export interface GameState {
-    currentGameId: number | undefined;
     currentGame: GamesResponse | null;
     userGames: GamesResponse[];
     fetchUserGamesStatus: FetchStatus;
@@ -15,7 +14,6 @@ export interface GameState {
 }
 
 const initialState: GameState = {
-    currentGameId: undefined,
     fetchUserGamesStatus: FetchStatus.INITIAL,
     fetchCurrentGamesStatus: FetchStatus.INITIAL,
     currentGame: null,
@@ -35,8 +33,8 @@ const gameSlice = createSlice<GameState, SliceCaseReducers<GameState>>({
         removeOpenGamesReducer: (state, action: PayloadAction<string>) => {
             state.openGames = state.openGames.filter((game) => game.socketId !== action.payload);
         },
-        setGameId: (state, action: PayloadAction<number>) => {
-            state.currentGameId = action.payload;
+        setNewGameData: (state, action: PayloadAction<GameStartProps>) => {
+            state.currentGame = action.payload;
         },
     },
     extraReducers: (builder) => {
@@ -48,7 +46,6 @@ const gameSlice = createSlice<GameState, SliceCaseReducers<GameState>>({
             .addCase(getCurrentGameAction.fulfilled, (state, { payload }) => {
                 state.fetchCurrentGamesStatus = FetchStatus.FETCHED;
                 state.currentGame = payload[0];
-                state.currentGameId = payload[0]?.id;
             })
             .addCase(getCurrentGameAction.rejected, (state, { error }) => {
                 state.fetchCurrentGamesStatus = FetchStatus.ERROR;
@@ -70,6 +67,6 @@ const gameSlice = createSlice<GameState, SliceCaseReducers<GameState>>({
     },
 });
 
-export const { openGamesReducer, removeOpenGamesReducer, setGameId } = gameSlice.actions;
+export const { openGamesReducer, removeOpenGamesReducer, setNewGameData } = gameSlice.actions;
 export const resetGameState = gameSlice.actions.reset as ActionCreatorWithoutPayload<string>;
 export const gameReducer = gameSlice.reducer;

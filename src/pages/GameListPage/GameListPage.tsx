@@ -41,22 +41,22 @@ export const GameListPage: React.FC = () => {
 
     const createGameButtonClick = useCallback(() => {
         if (user) {
-            socket.emit(
-                'createGameRequest',
-                {
-                    userId: user.id,
-                    username: user.username,
-                    rating: user.profile.rating,
-                }
-            );
+            socket.emit('createGameRequest', {
+                userId: user.id,
+                username: user.username,
+                rating: user.profile.rating,
+            });
         }
     }, [user]);
 
     const connectToGame = useCallback(
         (socketId: string) => () => {
-            socket.emit('joinGame', socketId);
+            socket.emit('joinGame', {
+                socketId: socketId,
+                userId: user?.id ?? -1,
+            });
         },
-        [],
+        [user],
     );
 
     const renderCreateGamesGridCell = useCallback(

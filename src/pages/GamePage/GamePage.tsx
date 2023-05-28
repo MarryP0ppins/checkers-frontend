@@ -16,16 +16,28 @@ const cnGame = cn('game-page');
 
 export const GamePage: React.FC = () => {
     const { user } = useAppSelector((store) => store.login);
-    const { currentGameId } = useAppSelector((store) => store.game);
+    const { currentGame } = useAppSelector((store) => store.game);
     const { lastMoves, gameMoves } = useAppSelector((store) => store.move);
+    const playerColor = useMemo(
+        () =>
+            user?.id === currentGame?.user_1_info.id
+                ? currentGame?.user_1_is_white
+                    ? CheckerColor.WHITE
+                    : CheckerColor.BLACK
+                : currentGame?.user_1_is_white
+                ? CheckerColor.BLACK
+                : CheckerColor.WHITE,
+        [currentGame?.user_1_info.id, currentGame?.user_1_is_white, user?.id],
+    );
+
     const game = useMemo(
         () =>
             new Game({
-                playerCheckersColor: CheckerColor.BLACK,
-                gameId: currentGameId ?? -1,
+                playerCheckersColor: playerColor,
+                gameId: currentGame?.id ?? -1,
                 checkersProperties: lastMoves,
             }),
-        [currentGameId, lastMoves],
+        [currentGame?.id, lastMoves, playerColor],
     );
     const [state, updateState] = useState<string>();
     const { height } = useWindowSizeContext();

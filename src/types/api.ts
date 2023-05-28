@@ -1,5 +1,6 @@
 import { MoveProps } from 'classes/Game/game.types';
 import { CreateGameRequest, GameListData } from 'pages/GameListPage/GameListPage.types';
+import { GameStartProps, JoinGameProps } from 'types/game';
 
 export enum FetchStatus {
     FETCHING = 'FETCHING',
@@ -10,13 +11,13 @@ export enum FetchStatus {
 
 export interface ClientToServerEvents {
     createGameRequest: (message: CreateGameRequest) => void;
-    joinGame: (socketId:string) => void;
+    joinGame: (data: JoinGameProps) => void;
     playerMove: (data: MoveProps) => void;
 }
 
 export interface ServerToClientEvents {
     openGames: (data: GameListData[]) => void;
     removeOpenGame: (socketId: string) => void;
-    gameStart: (gameId: number) => void;
+    gameStart: (data: GameStartProps) => void;
     enemyMove: (data: MoveProps) => void;
 }

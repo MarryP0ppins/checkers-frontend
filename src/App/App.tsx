@@ -34,7 +34,7 @@ export const App: React.FC = () => {
     const dispatch = useAppDispatch();
     const { width, height } = useWindowSize();
     const { user } = useAppSelector((store) => store.login);
-    const { currentGameId, fetchCurrentGamesStatus } = useAppSelector((store) => store.game);
+    const { currentGame, fetchCurrentGamesStatus } = useAppSelector((store) => store.game);
     const { fetchGameMovesStatus } = useAppSelector((store) => store.move);
     useLoader([fetchCurrentGamesStatus, fetchGameMovesStatus]);
 
@@ -49,17 +49,17 @@ export const App: React.FC = () => {
     }, [dispatch, fetchCurrentGamesStatus, user]);
 
     useEffect(() => {
-        if (currentGameId && fetchGameMovesStatus === FetchStatus.INITIAL) {
-            dispatch(getMovesAction({ game: currentGameId }));
+        if (currentGame && fetchGameMovesStatus === FetchStatus.INITIAL) {
+            dispatch(getMovesAction({ game: currentGame?.id }));
         }
-    }, [currentGameId, dispatch, fetchGameMovesStatus]);
+    }, [currentGame, dispatch, fetchGameMovesStatus]);
 
     const router = createBrowserRouter(
         createRoutesFromElements(
             <>
                 <Route
                     path="/"
-                    element={<RouteComponent page={<MainPage />} hasCurrentGame={Boolean(currentGameId)} withHeader />}
+                    element={<RouteComponent page={<MainPage />} hasCurrentGame={Boolean(currentGame)} withHeader />}
                 />
                 <Route path="login" element={<RouteComponent page={<LogInPage />} />} />
                 <Route path="registration" element={<RouteComponent page={<RegistrationPage />} />} />
@@ -68,7 +68,7 @@ export const App: React.FC = () => {
                     element={
                         <RouteComponent
                             page={<UserPage />}
-                            hasCurrentGame={Boolean(currentGameId)}
+                            hasCurrentGame={Boolean(currentGame)}
                             withHeader
                             privateRoute
                         />
@@ -77,20 +77,18 @@ export const App: React.FC = () => {
                 <Route path="game" element={<RouteComponent page={<GamePage />} withHeader privateRoute />} />
                 <Route
                     path="rules"
-                    element={<RouteComponent page={<RulesPage />} hasCurrentGame={Boolean(currentGameId)} withHeader />}
+                    element={<RouteComponent page={<RulesPage />} hasCurrentGame={Boolean(currentGame)} withHeader />}
                 />
                 <Route
                     path="rating"
-                    element={
-                        <RouteComponent page={<RatingPage />} hasCurrentGame={Boolean(currentGameId)} withHeader />
-                    }
+                    element={<RouteComponent page={<RatingPage />} hasCurrentGame={Boolean(currentGame)} withHeader />}
                 />
                 <Route
                     path="game-list"
                     element={
                         <RouteComponent
                             page={<GameListPage />}
-                            hasCurrentGame={Boolean(currentGameId)}
+                            hasCurrentGame={Boolean(currentGame)}
                             withHeader
                             privateRoute
                         />
