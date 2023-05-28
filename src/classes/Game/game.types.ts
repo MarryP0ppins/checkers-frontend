@@ -25,3 +25,14 @@ export interface GameConstructorProps {
     playerMoves?: string[];
     enemyMoves?: string[];
 }
+
+export interface MoveProps {
+    gameId: number;
+    playerId: number;
+    checkerId: number;
+    startPosition: string;
+    newPositions: string[];
+    isKing: boolean;
+    isWhite: boolean;
+    killed: number[];
+}

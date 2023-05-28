@@ -1,4 +1,4 @@
-import { CheckerColor, CheckerProperty, GameConstructorProps, PossibleMove } from 'classes/Game/game.types';
+import { CheckerColor, CheckerProperty, GameConstructorProps, MoveProps, PossibleMove } from 'classes/Game/game.types';
 import { newMove } from 'store/reducers/move';
 import { store } from 'store/store';
 
@@ -48,10 +48,20 @@ export class Game {
         this.findAllPossibleMoves();
     }
 
-    public setup(checkersProperties?: CheckerProperty[]): void {
-        if (checkersProperties) {
-            this.checkersProperties = checkersProperties.sort((a, b) => b.id - a.id);
-        }
+    public enemyMove(data: MoveProps): void {
+        const newPosition = data.newPositions.at(-1) ?? '';
+        const newX = newPosition.charCodeAt(0) - 97;
+        const newY = Number(newPosition[1]) - 1;
+        this.checkersProperties[data.checkerId] = {
+            ...this.checkersProperties[data.checkerId],
+            x: newX,
+            y: newY,
+            isKing: data.isKing,
+        };
+        data.killed.forEach((checkerId) => (this.checkersProperties[checkerId].death = true));
+        this.canMoveOneMoreTime = true;
+        this.playerTurn = true;
+        this.findAllPossibleMoves();
     }
 
     public getGameId(): number {
@@ -92,17 +102,6 @@ export class Game {
 
     public getCheckersToKill(): number[] {
         return this.checkersToKill;
-    }
-
-    /**
-     * Для обновления состояния игры после хода соперника
-     */
-    public setPlayerTurn(activeChecker: CheckerProperty, killedCheckers: number[]): void {
-        this.checkersProperties[activeChecker.id] = { ...activeChecker };
-        killedCheckers.forEach((id) => (this.checkersProperties[id].death = true));
-        this.activeChecker = undefined;
-        this.activeCheckerMoves = [];
-        this.canMoveOneMoreTime = true;
     }
 
     private findAllPossibleMoves(): void {
@@ -212,8 +211,9 @@ export class Game {
         this.checkersToKill = [];
         this.activeChecker = undefined;
         this.activeCheckerMoves = [];
-        this.canMoveOneMoreTime = true;
+        this.canMoveOneMoreTime = false;
         this.checkersToKill = [];
+        this.activeCheckerStartPosition = '';
     }
 
     public isSomeOneHere(x: number, y: number): CheckerProperty | undefined {

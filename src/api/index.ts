@@ -1,7 +1,8 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
-import { GameListData } from 'pages/GameListPage/GameListPage.types';
+import { CheckerColor } from 'classes/Game/game.types';
 import { io, Socket } from 'socket.io-client';
 import { openGamesReducer, removeOpenGamesReducer } from 'store/reducers/game';
+import { newMove } from 'store/reducers/move';
 import { store } from 'store/store';
 import { ClientToServerEvents, ServerToClientEvents } from 'types/api';
 
@@ -109,10 +110,15 @@ export const deleteApiRequest = <ResponseType>(link: string, params?: AxiosReque
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io('ws://localhost:8080/');
 
-socket.on('openGames', (data: GameListData[]) => {
+socket.on('openGames', (data) => {
     store.dispatch(openGamesReducer(data));
 });
 
-socket.on('removeOpenGame', (gameId: number) => {
+socket.on('removeOpenGame', (gameId) => {
     store.dispatch(removeOpenGamesReducer(gameId));
+});
+
+socket.on('enemyMove', (data) => {
+    const move = `${data.startPosition}${data.newPositions.length > 1 ? ':' : '-'}${data.newPositions.at(-1) ?? ''}`;
+    store.dispatch(newMove({ color: data.isWhite ? CheckerColor.WHITE : CheckerColor.BLACK, newMove: move }));
 });
