@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { cn } from '@bem-react/classname';
 import Paper from '@mui/material/Paper';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { CheckerWhiteIcon } from 'assets';
+import { CheckerBlackIcon, CheckerWhiteIcon } from 'assets';
 import { Game } from 'classes/Game/game';
 import { CheckerColor } from 'classes/Game/game.types';
 import { useWindowSizeContext } from 'context/WindowSizeContext';
@@ -49,28 +49,46 @@ export const GamePage: React.FC = () => {
                         ...Array(
                             game.getCountOfDeadCheckers(playerColorWhite ? CheckerColor.WHITE : CheckerColor.BLACK),
                         ).keys(),
-                    ].map((index) => (
-                        <CheckerWhiteIcon
-                            key={index}
-                            height={75}
-                            width={75}
-                            style={{ position: 'absolute', top: 20 * index }}
-                        />
-                    ))}
+                    ].map((index) =>
+                        playerColorWhite ? (
+                            <CheckerWhiteIcon
+                                key={index}
+                                height={75}
+                                width={75}
+                                style={{ position: 'absolute', top: 20 * index }}
+                            />
+                        ) : (
+                            <CheckerBlackIcon
+                                key={index}
+                                height={75}
+                                width={75}
+                                style={{ position: 'absolute', top: 20 * index }}
+                            />
+                        ),
+                    )}
                 </div>
                 <div className={cnGame('stack')}>
                     {[
                         ...Array(
                             game.getCountOfDeadCheckers(playerColorWhite ? CheckerColor.BLACK : CheckerColor.WHITE),
                         ).keys(),
-                    ].map((index) => (
-                        <CheckerWhiteIcon
-                            key={index}
-                            height={75}
-                            width={75}
-                            style={{ position: 'absolute', bottom: 20 * index }}
-                        />
-                    ))}
+                    ].map((index) =>
+                        playerColorWhite ? (
+                            <CheckerWhiteIcon
+                                key={index}
+                                height={75}
+                                width={75}
+                                style={{ position: 'absolute', bottom: 20 * index }}
+                            />
+                        ) : (
+                            <CheckerBlackIcon
+                                key={index}
+                                height={75}
+                                width={75}
+                                style={{ position: 'absolute', bottom: 20 * index }}
+                            />
+                        ),
+                    )}
                 </div>
             </div>
             <div className={cnGame('game-info')} style={{ height: height - 136 }}>
@@ -83,8 +101,6 @@ export const GamePage: React.FC = () => {
                     <DataGrid
                         columns={columns}
                         rows={gameMoves}
-                        //rowHeight={25}
-                        //columnHeaderHeight={36}
                         density="compact"
                         disableColumnMenu
                         hideFooterPagination

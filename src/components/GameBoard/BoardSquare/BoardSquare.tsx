@@ -25,7 +25,7 @@ export const BoardSquare: React.FC<BoardSquareProps> = ({ x, y, children, game, 
                     newPositions: game.getActiveCheckerMoves(),
                     isKing: game.getActiveChecker()?.isKing ?? false,
                     isWhite: game.getActiveChecker()?.color === CheckerColor.WHITE,
-                    killed: game.getCheckersToKill()
+                    killed: game.getCheckersToKill(),
                 });
                 console.log(
                     `gameId - ${game.getGameId()}\n`,
