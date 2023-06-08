@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { cn } from '@bem-react/classname';
 import Paper from '@mui/material/Paper';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
@@ -6,7 +6,11 @@ import { CheckerBlackIcon, CheckerWhiteIcon } from 'assets';
 import { Game } from 'classes/Game/game';
 import { CheckerColor } from 'classes/Game/game.types';
 import { useWindowSizeContext } from 'context/WindowSizeContext';
-import { useAppSelector } from 'store/store';
+import moment from 'moment';
+import { getEnemyProfileAction } from 'store/actions/profile';
+import { getUserProfileAction } from 'store/actions/user';
+import { useAppDispatch, useAppSelector } from 'store/store';
+import { FetchStatus } from 'types/api';
 
 import { GameBoard } from 'components/GameBoard';
 
@@ -15,30 +19,50 @@ import './GamePage.scss';
 const cnGame = cn('game-page');
 
 export const GamePage: React.FC = () => {
-    const { user } = useAppSelector((store) => store.login);
+    const dispatch = useAppDispatch();
+    const { user, fetchUserProfileStatus } = useAppSelector((store) => store.user);
     const { currentGame } = useAppSelector((store) => store.game);
-    const { lastMoves, gameMoves } = useAppSelector((store) => store.move);
-    const playerColor = useMemo(
-        () =>
-            user?.id === currentGame?.user_1_info.id
-                ? currentGame?.user_1_is_white
-                    ? CheckerColor.WHITE
-                    : CheckerColor.BLACK
-                : currentGame?.user_1_is_white
-                ? CheckerColor.BLACK
-                : CheckerColor.WHITE,
-        [currentGame?.user_1_info.id, currentGame?.user_1_is_white, user?.id],
-    );
+    const { lastMoves, gameMoves, enemyMove } = useAppSelector((store) => store.move);
+    const { enemyProfile, fetchEnemyProfileStatus } = useAppSelector((store) => store.profile);
 
-    const game = useMemo(
-        () =>
-            new Game({
-                playerCheckersColor: playerColor,
-                gameId: currentGame?.id ?? -1,
-                checkersProperties: lastMoves,
-            }),
-        [currentGame?.id, lastMoves, playerColor],
-    );
+    const playerIsUserOne = useMemo(() => {
+        if (currentGame && user) {
+            return currentGame?.userOneInfo.id === user?.id;
+        }
+    }, [currentGame, user]);
+
+    useEffect(() => {
+        if (fetchUserProfileStatus === FetchStatus.INITIAL) {
+            dispatch(getUserProfileAction());
+        }
+    }, [dispatch, fetchUserProfileStatus]);
+
+    useEffect(() => {
+        if (fetchEnemyProfileStatus === FetchStatus.INITIAL && currentGame && playerIsUserOne !== undefined) {
+            dispatch(
+                getEnemyProfileAction(playerIsUserOne ? currentGame?.userTwoInfo.id : currentGame?.userOneInfo.id),
+            );
+        }
+    }, [currentGame, dispatch, fetchEnemyProfileStatus, playerIsUserOne]);
+
+    const game = useMemo(() => {
+        const playerColor = playerIsUserOne ? CheckerColor.WHITE : CheckerColor.BLACK;
+
+        return new Game({
+            playerCheckersColor: playerColor,
+            gameId: currentGame?.id ?? -1,
+            checkersProperties: lastMoves,
+            playerTurn: playerIsUserOne ? Boolean(currentGame?.userOneTurn) : Boolean(!currentGame?.userOneTurn),
+        });
+    }, [currentGame, lastMoves, playerIsUserOne]);
+
+    useEffect(() => {
+        if (enemyMove) {
+            game.enemyMove(enemyMove);
+            updateState(moment().format('x'));
+        }
+    }, [enemyMove, game]);
+
     const [state, updateState] = useState<string>();
     const { height } = useWindowSizeContext();
     const playerColorWhite = game.getPlayerColor() === CheckerColor.WHITE;
@@ -54,7 +78,14 @@ export const GamePage: React.FC = () => {
 
     return (
         <div className={`layout ${cnGame()}`}>
-            <GameBoard game={game} state={state} updateState={updateState} size={height - 136} user={user} />
+            <GameBoard
+                game={game}
+                state={state}
+                updateState={updateState}
+                size={height - 136}
+                user={user}
+                enemy={enemyProfile}
+            />
             <div className={cnGame('killed-checkers')} style={{ height: height - 136 }}>
                 <div className={cnGame('stack')}>
                     {[
@@ -86,14 +117,14 @@ export const GamePage: React.FC = () => {
                         ).keys(),
                     ].map((index) =>
                         playerColorWhite ? (
-                            <CheckerWhiteIcon
+                            <CheckerBlackIcon
                                 key={index}
                                 height={75}
                                 width={75}
                                 style={{ position: 'absolute', bottom: 20 * index }}
                             />
                         ) : (
-                            <CheckerBlackIcon
+                            <CheckerWhiteIcon
                                 key={index}
                                 height={75}
                                 width={75}

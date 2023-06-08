@@ -1,5 +1,5 @@
 import { ActionCreatorWithoutPayload, createSlice, PayloadAction, SliceCaseReducers } from '@reduxjs/toolkit';
-import { CheckerColor, CheckerProperty } from 'classes/Game/game.types';
+import { CheckerColor, CheckerProperty, MoveProps } from 'classes/Game/game.types';
 import { MovesTableRow } from 'pages/GamePage/GamePage.types';
 import { getMovesAction } from 'store/actions/move';
 import { normalizeGameMoves, normalizeLastMoves } from 'store/normalizers/move';
@@ -8,11 +8,13 @@ import { FetchStatus } from 'types/api';
 export interface MoveState {
     lastMoves: CheckerProperty[];
     gameMoves: MovesTableRow[];
+    enemyMove: MoveProps | null;
     fetchGameMovesStatus: FetchStatus;
     error: unknown;
 }
 
 const initialState: MoveState = {
+    enemyMove: null,
     lastMoves: [],
     gameMoves: [],
     fetchGameMovesStatus: FetchStatus.INITIAL,
@@ -41,7 +43,9 @@ const moveSlice = createSlice<MoveState, SliceCaseReducers<MoveState>>({
                 };
             }
             state.gameMoves = gameMoves;
-            return;
+        },
+        enemyMove: (state, action: PayloadAction<MoveProps>) => {
+            state.enemyMove = action.payload;
         },
     },
     extraReducers: (builder) => {
@@ -53,7 +57,7 @@ const moveSlice = createSlice<MoveState, SliceCaseReducers<MoveState>>({
             .addCase(getMovesAction.fulfilled, (state, { payload }) => {
                 state.fetchGameMovesStatus = FetchStatus.FETCHED;
                 state.gameMoves = normalizeGameMoves(payload);
-                state.lastMoves = normalizeLastMoves(payload.filter((move) => move.is_last_move));
+                state.lastMoves = normalizeLastMoves(payload.filter((move) => move.isLastMove));
             })
             .addCase(getMovesAction.rejected, (state, { error }) => {
                 state.fetchGameMovesStatus = FetchStatus.ERROR;
@@ -62,6 +66,6 @@ const moveSlice = createSlice<MoveState, SliceCaseReducers<MoveState>>({
     },
 });
 
-export const { newMove } = moveSlice.actions;
+export const { newMove, enemyMove } = moveSlice.actions;
 export const resetMoveState = moveSlice.actions.reset as ActionCreatorWithoutPayload<string>;
 export const moveReducer = moveSlice.reducer;

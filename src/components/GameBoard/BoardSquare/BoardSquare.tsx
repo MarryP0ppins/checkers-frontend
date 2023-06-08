@@ -4,7 +4,9 @@ import { cn } from '@bem-react/classname';
 import { socket } from 'api';
 import { CheckerColor, CheckerProperty } from 'classes/Game/game.types';
 import moment from 'moment';
-import { ItemTypes } from 'types/game';
+import { ItemTypes, WinnerStatus } from 'types/game';
+
+import { pointsEarned } from 'utils/pointsEarned';
 
 import { BoardSquareProps } from './BoardSquare.types';
 
@@ -12,14 +14,14 @@ import './BoardSquare.scss';
 
 const cnBoardSquare = cn('board-square');
 
-export const BoardSquare: React.FC<BoardSquareProps> = ({ x, y, children, game, updateState, userId }) => {
+export const BoardSquare: React.FC<BoardSquareProps> = ({ x, y, children, game, updateState, user, enemy }) => {
     const onDropHandle = useCallback(
         (item: CheckerProperty) => {
             game.moveAndKillChecker(item.id, x, y);
             if (!game.hasPossibleMoves()) {
                 socket.emit('playerMove', {
                     gameId: game.getGameId(),
-                    playerId: userId,
+                    playerId: user.id,
                     checkerId: game.getActiveChecker()?.id ?? -1,
                     startPosition: game.getActiveCheckerStartPosition(),
                     newPositions: game.getActiveCheckerMoves(),
@@ -29,7 +31,7 @@ export const BoardSquare: React.FC<BoardSquareProps> = ({ x, y, children, game, 
                 });
                 console.log(
                     `gameId - ${game.getGameId()}\n`,
-                    `playerId - ${userId}\n`,
+                    `playerId - ${user.id}\n`,
                     `checkerId - ${game.getActiveChecker()?.id ?? -1}\n`,
                     `startPosition - ${game.getActiveCheckerStartPosition()}\n`,
                     `newPositions - ${game.getActiveCheckerMoves().join(',')}\n`,
@@ -37,11 +39,31 @@ export const BoardSquare: React.FC<BoardSquareProps> = ({ x, y, children, game, 
                     `isWhite - ${Number(game.getActiveChecker()?.color === CheckerColor.WHITE)}\n`,
                     `killed - ${game.getCheckersToKill().join(',')}`,
                 );
-                game.switchTurnToEnemy();
+                const enemyColor =
+                    game.getPlayerColor() === CheckerColor.WHITE ? CheckerColor.BLACK : CheckerColor.WHITE;
+                const playerIsUserOne = game.getPlayerColor() === CheckerColor.WHITE;
+                if (game.getCountOfDeadCheckers(enemyColor) === 12) {
+                    const winner = playerIsUserOne ? WinnerStatus.USER_1 : WinnerStatus.USER_2;
+                    const { userOneEarned, userTwoEarned } = pointsEarned({
+                        userOnePoints: playerIsUserOne ? user.profile.rating : enemy.rating,
+                        userOneGames: playerIsUserOne ? user.profile.games : enemy.games,
+                        userTwoPoints: playerIsUserOne ? enemy.rating : user.profile.rating,
+                        userTwoGames: playerIsUserOne ? enemy.games : user.profile.games,
+                        winner: winner,
+                    });
+                    socket.emit('endGameRequest', {
+                        gameId: game.getGameId(),
+                        winner: winner,
+                        userOnePoints: userOneEarned,
+                        userTwoPoints: userTwoEarned,
+                    });
+                } else {
+                    game.switchTurnToEnemy();
+                }
             }
             updateState(moment().format('x'));
         },
-        [game, updateState, userId, x, y],
+        [enemy, game, updateState, user, x, y],
     );
     const canDropHandle = useCallback((item: CheckerProperty) => game.canDoMoveHere(item, x, y), [game, x, y]);
 

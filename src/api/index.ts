@@ -2,7 +2,8 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, InternalAxiosRequ
 import { CheckerColor } from 'classes/Game/game.types';
 import { io, Socket } from 'socket.io-client';
 import { openGamesReducer, removeOpenGamesReducer, setNewGameData } from 'store/reducers/game';
-import { newMove } from 'store/reducers/move';
+import { loaded } from 'store/reducers/loader';
+import { enemyMove, newMove } from 'store/reducers/move';
 import { store } from 'store/store';
 import { ClientToServerEvents, ServerToClientEvents } from 'types/api';
 
@@ -108,7 +109,8 @@ export const deleteApiRequest = <ResponseType>(link: string, params?: AxiosReque
             throw JSON.stringify(err.response?.data);
         });
 
-export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io('ws://localhost:8080/');
+export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io('ws://localhost:5000/');
+//export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io('ws://checkers-ws.vercel.app/');
 
 socket.on('openGames', (data) => {
     store.dispatch(openGamesReducer(data));
@@ -121,8 +123,10 @@ socket.on('removeOpenGame', (socketId) => {
 socket.on('enemyMove', (data) => {
     const move = `${data.startPosition}${data.newPositions.length > 1 ? ':' : '-'}${data.newPositions.at(-1) ?? ''}`;
     store.dispatch(newMove({ color: data.isWhite ? CheckerColor.WHITE : CheckerColor.BLACK, newMove: move }));
+    store.dispatch(enemyMove(data));
 });
 
 socket.on('gameStart', (data) => {
     store.dispatch(setNewGameData(data));
+    store.dispatch(loaded({ forced: true }));
 });

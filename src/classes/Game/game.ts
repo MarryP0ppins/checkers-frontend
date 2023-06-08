@@ -9,16 +9,16 @@ export class Game {
         { id: 2, x: 4, y: 0, death: false, isKing: false, color: CheckerColor.WHITE },
         { id: 3, x: 6, y: 0, death: false, isKing: false, color: CheckerColor.WHITE },
         { id: 4, x: 1, y: 1, death: false, isKing: false, color: CheckerColor.WHITE },
-        { id: 5, x: 2, y: 4, death: false, isKing: false, color: CheckerColor.WHITE },
+        { id: 5, x: 3, y: 1, death: false, isKing: false, color: CheckerColor.WHITE },
         { id: 6, x: 5, y: 1, death: false, isKing: false, color: CheckerColor.WHITE },
         { id: 7, x: 7, y: 1, death: false, isKing: false, color: CheckerColor.WHITE },
         { id: 8, x: 0, y: 2, death: false, isKing: false, color: CheckerColor.WHITE },
-        { id: 9, x: 2, y: 2, death: false, isKing: true, color: CheckerColor.WHITE },
+        { id: 9, x: 2, y: 2, death: false, isKing: false, color: CheckerColor.WHITE },
         { id: 10, x: 4, y: 2, death: false, isKing: false, color: CheckerColor.WHITE },
         { id: 11, x: 6, y: 2, death: false, isKing: false, color: CheckerColor.WHITE },
         { id: 12, x: 7, y: 7, death: false, isKing: false, color: CheckerColor.BLACK },
         { id: 13, x: 5, y: 7, death: false, isKing: false, color: CheckerColor.BLACK },
-        { id: 14, x: 3, y: 7, death: false, isKing: true, color: CheckerColor.BLACK },
+        { id: 14, x: 3, y: 7, death: false, isKing: false, color: CheckerColor.BLACK },
         { id: 15, x: 1, y: 7, death: false, isKing: false, color: CheckerColor.BLACK },
         { id: 16, x: 6, y: 6, death: false, isKing: false, color: CheckerColor.BLACK },
         { id: 17, x: 4, y: 6, death: false, isKing: false, color: CheckerColor.BLACK },
@@ -44,8 +44,10 @@ export class Game {
         this.gameId = value.gameId;
         this.playerCheckersColor = value.playerCheckersColor;
         value.checkersProperties?.forEach((property) => (this.checkersProperties[property.id] = { ...property }));
-        this.playerTurn = value.playerCheckersColor === CheckerColor.WHITE;
-        this.findAllPossibleMoves();
+        this.playerTurn = value.playerTurn;
+        if (this.playerTurn) {
+            this.findAllPossibleMoves();
+        }
     }
 
     public enemyMove(data: MoveProps): void {
@@ -107,60 +109,66 @@ export class Game {
     private findAllPossibleMoves(): void {
         this.possibleMoves = [];
         let possibleKills = false;
-        this.checkersProperties.forEach((checker) => {
-            if (checker.color === this.playerCheckersColor && !checker.death) {
-                const bCoef = (k: number) => checker.y - k * checker.x;
-                for (let i = 0; i < 4; i++) {
-                    let hasChecker = false;
-                    const coef = i % 2 === 1 ? 1 : -1;
-                    const rightPart = i === 1 || i === 2;
-                    const start = checker.x + (rightPart ? 1 : -1);
-                    for (
-                        let x = start;
-                        rightPart
-                            ? x <= (checker.isKing ? 7 : Math.min(7, checker.x + 2))
-                            : x >= (checker.isKing ? 0 : Math.max(0, checker.x - 2));
-                        x = x + (rightPart ? 1 : -1)
-                    ) {
-                        const y = coef * x + bCoef(coef);
-                        if (y >= 0 && y <= 7) {
-                            const checkerAtThisSquare = this.checkersProperties.find(
-                                (ckr) =>
-                                    ckr.x === x && ckr.y === y && !ckr.death && !this.checkersToKill.includes(ckr.id),
-                            );
-                            if (checkerAtThisSquare) {
-                                if (hasChecker || checkerAtThisSquare.color === checker.color) break;
-                                hasChecker = true;
-                            } else if (hasChecker) {
-                                if (!possibleKills) this.possibleMoves = [];
-                                this.possibleMoves.push({
-                                    checkerId: checker.id,
-                                    toX: x,
-                                    toY: y,
-                                });
-                                possibleKills = true;
-                                if (!checker.isKing) break;
-                            } else if (
-                                !possibleKills &&
-                                (checker.isKing
-                                    ? true
-                                    : checker.color === CheckerColor.WHITE
-                                    ? y > checker.y
-                                    : y < checker.y) &&
-                                !this.activeChecker
-                            ) {
-                                this.possibleMoves.push({
-                                    checkerId: checker.id,
-                                    toX: x,
-                                    toY: y,
-                                });
-                                if (!checker.isKing) break;
+        if (this.canMoveOneMoreTime) {
+            const checkersToCheck = this.activeChecker ? [this.activeChecker] : this.checkersProperties;
+            checkersToCheck.forEach((checker) => {
+                if (checker.color === this.playerCheckersColor && !checker.death) {
+                    const bCoef = (k: number) => checker.y - k * checker.x;
+                    for (let i = 0; i < 4; i++) {
+                        let hasChecker = false;
+                        const coef = i % 2 === 1 ? 1 : -1;
+                        const rightPart = i === 1 || i === 2;
+                        const start = checker.x + (rightPart ? 1 : -1);
+                        for (
+                            let x = start;
+                            rightPart
+                                ? x <= (checker.isKing ? 7 : Math.min(7, checker.x + 2))
+                                : x >= (checker.isKing ? 0 : Math.max(0, checker.x - 2));
+                            x = x + (rightPart ? 1 : -1)
+                        ) {
+                            const y = coef * x + bCoef(coef);
+                            if (y >= 0 && y <= 7) {
+                                const checkerAtThisSquare = this.checkersProperties.find(
+                                    (ckr) =>
+                                        ckr.x === x &&
+                                        ckr.y === y &&
+                                        !ckr.death &&
+                                        !this.checkersToKill.includes(ckr.id),
+                                );
+                                if (checkerAtThisSquare) {
+                                    if (hasChecker || checkerAtThisSquare.color === checker.color) break;
+                                    hasChecker = true;
+                                } else if (hasChecker) {
+                                    if (!possibleKills) this.possibleMoves = [];
+                                    this.possibleMoves.push({
+                                        checkerId: checker.id,
+                                        toX: x,
+                                        toY: y,
+                                    });
+                                    possibleKills = true;
+                                    if (!checker.isKing) break;
+                                } else if (
+                                    !possibleKills &&
+                                    (checker.isKing
+                                        ? true
+                                        : checker.color === CheckerColor.WHITE
+                                        ? y > checker.y
+                                        : y < checker.y) &&
+                                    !this.activeChecker
+                                ) {
+                                    this.possibleMoves.push({
+                                        checkerId: checker.id,
+                                        toX: x,
+                                        toY: y,
+                                    });
+                                    if (!checker.isKing) break;
+                                }
                             }
                         }
                     }
                 }
-            }
-        });
+            });
+        }
     }
 
     public canDoMoveHere(checkerProperty: CheckerProperty, toX: number, toY: number): boolean {
@@ -186,11 +194,12 @@ export class Game {
         }
         this.checkersProperties[checker.id].x = toX;
         this.checkersProperties[checker.id].y = toY;
-        if (toY === (checker.color === CheckerColor.WHITE ? 7 : 0)) {
-            this.checkersProperties[checker.id].isKing = true;
-        }
         if (!this.activeChecker) {
             this.activeChecker = { ...checker };
+        }
+        if (toY === (checker.color === CheckerColor.WHITE ? 7 : 0)) {
+            this.checkersProperties[checker.id].isKing = true;
+            this.activeChecker.isKing = true;
         }
         this.activeCheckerMoves.push(`${String.fromCharCode(toX + 97)}${toY + 1}`);
         this.findAllPossibleMoves();

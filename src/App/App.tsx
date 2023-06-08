@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { createBrowserRouter, createRoutesFromElements, Navigate, Route, RouterProvider } from 'react-router-dom';
+import { socket } from 'api';
 import { WindowSizeContext } from 'context/WindowSizeContext';
 import { useLoader, useWindowSize } from 'hooks';
 import moment from 'moment';
@@ -50,6 +51,7 @@ export const App: React.FC = () => {
 
     useEffect(() => {
         if (currentGame && fetchGameMovesStatus === FetchStatus.INITIAL) {
+            socket.emit('rejoinGame', currentGame.id);
             dispatch(getMovesAction({ game: currentGame?.id }));
         }
     }, [currentGame, dispatch, fetchGameMovesStatus]);
@@ -57,43 +59,14 @@ export const App: React.FC = () => {
     const router = createBrowserRouter(
         createRoutesFromElements(
             <>
-                <Route
-                    path="/"
-                    element={<RouteComponent page={<MainPage />} hasCurrentGame={Boolean(currentGame)} withHeader />}
-                />
+                <Route path="/" element={<RouteComponent page={<MainPage />} withHeader />} />
                 <Route path="login" element={<RouteComponent page={<LogInPage />} />} />
                 <Route path="registration" element={<RouteComponent page={<RegistrationPage />} />} />
-                <Route
-                    path="profile"
-                    element={
-                        <RouteComponent
-                            page={<UserPage />}
-                            hasCurrentGame={Boolean(currentGame)}
-                            withHeader
-                            privateRoute
-                        />
-                    }
-                />
+                <Route path="profile" element={<RouteComponent page={<UserPage />} withHeader privateRoute />} />
                 <Route path="game" element={<RouteComponent page={<GamePage />} withHeader privateRoute />} />
-                <Route
-                    path="rules"
-                    element={<RouteComponent page={<RulesPage />} hasCurrentGame={Boolean(currentGame)} withHeader />}
-                />
-                <Route
-                    path="rating"
-                    element={<RouteComponent page={<RatingPage />} hasCurrentGame={Boolean(currentGame)} withHeader />}
-                />
-                <Route
-                    path="game-list"
-                    element={
-                        <RouteComponent
-                            page={<GameListPage />}
-                            hasCurrentGame={Boolean(currentGame)}
-                            withHeader
-                            privateRoute
-                        />
-                    }
-                />
+                <Route path="rules" element={<RouteComponent page={<RulesPage />} withHeader />} />
+                <Route path="rating" element={<RouteComponent page={<RatingPage />} withHeader />} />
+                <Route path="game-list" element={<RouteComponent page={<GameListPage />} withHeader privateRoute />} />
                 <Route path="*" element={<Navigate to="/" />} />
             </>,
         ),

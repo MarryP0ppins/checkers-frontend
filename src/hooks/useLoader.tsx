@@ -12,9 +12,9 @@ export const useLoader = (statuses: FetchStatus[]): void => {
         }, false);
 
         if (isFetching) {
-            dispatch(loading());
+            dispatch(loading({ forced: false }));
         } else {
-            dispatch(loaded());
+            dispatch(loaded({ forced: false }));
         }
     }, [statuses, dispatch]);
 };

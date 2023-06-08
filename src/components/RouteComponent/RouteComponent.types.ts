@@ -4,5 +4,4 @@ export interface RouteComponentProps {
     privateRoute?: boolean;
     withHeader?: boolean;
     page: ReactNode;
-    hasCurrentGame?: boolean;
 }

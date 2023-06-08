@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@bem-react/classname';
 import Button from '@mui/material/Button';
@@ -9,8 +9,8 @@ import { ArrowLeftIcon } from 'assets';
 import { useLoader } from 'hooks';
 import { GameListData } from 'pages/GameListPage/GameListPage.types';
 import { getUserProfileAction } from 'store/actions/user';
-import { useAppDispatch, useAppSelector } from 'store/store';
-import { FetchStatus } from 'types/api';
+import { loading } from 'store/reducers/loader';
+import { store, useAppDispatch, useAppSelector } from 'store/store';
 
 import { PageLoader } from 'components/PageLoader';
 
@@ -18,22 +18,29 @@ import './GameListPage.scss';
 
 const cnGameList = cn('gameList-page');
 
-const startGameData: GameListData[] = [];
-
 export const GameListPage: React.FC = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
     const { user, fetchUserProfileStatus } = useAppSelector((store) => store.user);
-    const { openGames } = useAppSelector((store) => store.game);
+    const { openGames, currentGame } = useAppSelector((store) => store.game);
 
     useLoader([fetchUserProfileStatus]);
 
+    const firstRequest = useRef(true);
+
     useEffect(() => {
-        if (fetchUserProfileStatus === FetchStatus.INITIAL) {
+        if (firstRequest.current) {
             dispatch(getUserProfileAction());
+            firstRequest.current = false;
         }
-    }, [dispatch, fetchUserProfileStatus, user]);
+    }, [dispatch, user]);
+
+    useEffect(() => {
+        if (currentGame) {
+            navigate('/game');
+        }
+    }, [currentGame, dispatch, navigate]);
 
     const onReturnButtonClick = useCallback(() => {
         navigate('/');
@@ -41,16 +48,18 @@ export const GameListPage: React.FC = () => {
 
     const createGameButtonClick = useCallback(() => {
         if (user) {
+            dispatch(loading({ forced: true }));
             socket.emit('createGameRequest', {
                 userId: user.id,
                 username: user.username,
                 rating: user.profile.rating,
             });
         }
-    }, [user]);
+    }, [dispatch, user]);
 
     const connectToGame = useCallback(
         (socketId: string) => () => {
+            store.dispatch(loading({ forced: true }));
             socket.emit('joinGame', {
                 socketId: socketId,
                 userId: user?.id ?? -1,
@@ -69,13 +78,13 @@ export const GameListPage: React.FC = () => {
                     size="large"
                     variant="contained"
                     onClick={connectToGame(rowData.socketId)}
-                    disabled={startGameData.length > 0}
+                    disabled={!user}
                 >
                     Присоединиться
                 </Button>
             );
         },
-        [connectToGame],
+        [connectToGame, user],
     );
 
     const createdGamesColumns = useMemo<GridColDef[]>(
@@ -128,7 +137,7 @@ export const GameListPage: React.FC = () => {
                     size="large"
                     variant="contained"
                     onClick={createGameButtonClick}
-                    disabled={startGameData.length > 0}
+                    disabled={!user}
                 >
                     Создать игру
                 </Button>

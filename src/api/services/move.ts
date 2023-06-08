@@ -5,7 +5,7 @@ export interface MovesResponseParams {
     checker_id?: number;
     game?: number;
     user?: number;
-    is_last_move?: boolean;
+    isLastMove?: boolean;
 }
 
 export const movesRequest = async (params: MovesResponseParams): Promise<MovesResponse[]> => {

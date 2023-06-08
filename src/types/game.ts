@@ -17,15 +17,15 @@ export enum WinnerStatus {
 
 export interface GamesResponse {
     id: number;
-    user_1_info: UserResponse;
-    user_2_info: UserResponse;
-    user_1_turn: boolean;
-    user_1_is_white: boolean;
+    userOneInfo: UserResponse;
+    userTwoInfo: UserResponse;
+    userOneTurn: boolean;
+    userOneIsWhite: boolean;
     winner?: WinnerStatus;
-    user_1_points?: number;
-    user_2_points?: number;
-    start_at: string;
-    finish_at?: string;
+    userOnePoints?: number;
+    userTwoPoints?: number;
+    startAt: string;
+    finishAt?: string;
     status: GameStatus;
     moves?: { [username: string]: string[] };
 }
@@ -41,15 +41,23 @@ export interface UserGamesData {
 
 export interface GameStartProps {
     id: number;
-    user_1_info: UserResponse;
-    user_2_info: UserResponse;
-    start_at: string;
-    user_1_turn: boolean;
-    user_1_is_white: boolean;
+    userOneInfo: UserResponse;
+    userTwoInfo: UserResponse;
+    startAt: string;
+    userOneTurn: boolean;
+    userOneIsWhite: boolean;
     status: GameStatus;
 }
 
 export interface JoinGameProps {
     socketId: string;
     userId: number;
+}
+
+export interface EnemyProfile {
+    id: number;
+    username: string;
+    wins: number;
+    games: number;
+    rating: number;
 }

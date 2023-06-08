@@ -9,7 +9,7 @@ const CnPageLoader = cn('pageLoader');
 
 export const PageLoader: React.FC<{ showLoading?: boolean; zIndex?: number }> = React.memo(
     ({ showLoading, zIndex }) => {
-        const { isLoading } = useAppSelector((store) => store.loader);
+        const { isLoading, forcedLoading } = useAppSelector((store) => store.loader);
 
         const [isShow, setIsShow] = useState(true);
 
@@ -23,9 +23,9 @@ export const PageLoader: React.FC<{ showLoading?: boolean; zIndex?: number }> = 
             return () => {
                 clearTimeout(setTimeoutId);
             };
-        }, [isLoading, showLoading]);
+        }, [isLoading, forcedLoading, showLoading]);
 
-        if (isShow || isLoading || showLoading) {
+        if (isShow || isLoading || forcedLoading || showLoading) {
             return (
                 <div className={CnPageLoader()} style={{ zIndex }}>
                     <div className={CnPageLoader('loader')}>
