@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { cn } from '@bem-react/classname';
 import { CheckerColor } from 'classes/Game/game.types';
-import { EnemyProfile } from 'types/game';
-import { UserResponse } from 'types/user';
 
 import { Checker } from 'components/Checker';
 import { BoardSquare } from 'components/GameBoard/BoardSquare';
@@ -13,9 +11,8 @@ import './GameBoard.scss';
 
 const cnGameBoard = cn('game-board');
 
-export const GameBoard: React.FC<GameBoardProps> = ({ game, state, updateState, size, user, enemy }) => {
+export const GameBoard: React.FC<GameBoardProps> = ({ game, state, updateState, size}) => {
     const [,] = useState<string | undefined>(state);
-
     return (
         <div className={cnGameBoard()} style={{ height: size, width: size }}>
             {[...Array(64).keys()].map((squareId, index) => {
@@ -31,8 +28,6 @@ export const GameBoard: React.FC<GameBoardProps> = ({ game, state, updateState, 
                         index={squareId}
                         game={game}
                         updateState={updateState}
-                        user={user ?? ({} as UserResponse)}
-                        enemy={enemy ?? ({} as EnemyProfile)}
                     >
                         {(playerColor === CheckerColor.WHITE ? x === 0 : x === 7) && (
                             <div className={cnGameBoard('y-axis')}>{y + 1}</div>

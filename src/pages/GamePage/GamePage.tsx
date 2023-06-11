@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { cn } from '@bem-react/classname';
 import Paper from '@mui/material/Paper';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
@@ -9,8 +10,13 @@ import { useWindowSizeContext } from 'context/WindowSizeContext';
 import moment from 'moment';
 import { getEnemyProfileAction } from 'store/actions/profile';
 import { getUserProfileAction } from 'store/actions/user';
+import { error } from 'store/reducers/error';
+import { resetCurrentGameState } from 'store/reducers/game';
+import { resetMoveState } from 'store/reducers/move';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { FetchStatus } from 'types/api';
+import { WinnerStatus } from 'types/game';
+import { ProfileResponse } from 'types/profile';
 
 import { GameBoard } from 'components/GameBoard';
 
@@ -20,8 +26,9 @@ const cnGame = cn('game-page');
 
 export const GamePage: React.FC = () => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const { user, fetchUserProfileStatus } = useAppSelector((store) => store.user);
-    const { currentGame } = useAppSelector((store) => store.game);
+    const { currentGame, winner } = useAppSelector((store) => store.game);
     const { lastMoves, gameMoves, enemyMove } = useAppSelector((store) => store.move);
     const { enemyProfile, fetchEnemyProfileStatus } = useAppSelector((store) => store.profile);
 
@@ -47,14 +54,22 @@ export const GamePage: React.FC = () => {
 
     const game = useMemo(() => {
         const playerColor = playerIsUserOne ? CheckerColor.WHITE : CheckerColor.BLACK;
-
+        const playerProfile: ProfileResponse = {
+            id: user?.id ?? -1,
+            username: user?.username ?? '',
+            wins: user?.profile.wins ?? 0,
+            games: user?.profile.games ?? 0,
+            rating: user?.profile.wins ?? 0,
+        };
         return new Game({
             playerCheckersColor: playerColor,
             gameId: currentGame?.id ?? -1,
             checkersProperties: lastMoves,
             playerTurn: playerIsUserOne ? Boolean(currentGame?.userOneTurn) : Boolean(!currentGame?.userOneTurn),
+            playerProfile: playerProfile,
+            enemyProfile: enemyProfile ?? ({} as ProfileResponse),
         });
-    }, [currentGame, lastMoves, playerIsUserOne]);
+    }, [currentGame?.id, currentGame?.userOneTurn, enemyProfile, lastMoves, playerIsUserOne, user?.id, user?.profile.games, user?.profile.wins, user?.username]);
 
     useEffect(() => {
         if (enemyMove) {
@@ -75,6 +90,29 @@ export const GamePage: React.FC = () => {
         ],
         [],
     );
+    const actionButtonHandler = useCallback(() => navigate('/'), [navigate]);
+
+    useEffect(() => {
+        if (winner !== null) {
+            let message = '';
+            if (playerIsUserOne && winner === WinnerStatus.USER_1 || !playerIsUserOne && winner === WinnerStatus.USER_2) {
+                message = 'Вы победили!';
+            } else if (playerIsUserOne && winner === WinnerStatus.USER_2 || !playerIsUserOne && winner === WinnerStatus.USER_1) {
+                message = 'Вы проиграли!';
+            } else {
+                message = 'Ничья!';
+            }
+            dispatch(
+                error({
+                    message,
+                    actionButtonClick: actionButtonHandler,
+                    cancelButtonClick: actionButtonHandler,
+                }),
+            );
+            dispatch(resetMoveState());
+            dispatch(resetCurrentGameState());
+        }
+    }, [actionButtonHandler, dispatch, playerIsUserOne, winner]);
 
     return (
         <div className={`layout ${cnGame()}`}>
@@ -83,8 +121,6 @@ export const GamePage: React.FC = () => {
                 state={state}
                 updateState={updateState}
                 size={height - 136}
-                user={user}
-                enemy={enemyProfile}
             />
             <div className={cnGame('killed-checkers')} style={{ height: height - 136 }}>
                 <div className={cnGame('stack')}>

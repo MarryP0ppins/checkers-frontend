@@ -14,14 +14,14 @@ import './BoardSquare.scss';
 
 const cnBoardSquare = cn('board-square');
 
-export const BoardSquare: React.FC<BoardSquareProps> = ({ x, y, children, game, updateState, user, enemy }) => {
+export const BoardSquare: React.FC<BoardSquareProps> = ({ x, y, children, game, updateState }) => {
     const onDropHandle = useCallback(
         (item: CheckerProperty) => {
             game.moveAndKillChecker(item.id, x, y);
             if (!game.hasPossibleMoves()) {
                 socket.emit('playerMove', {
                     gameId: game.getGameId(),
-                    playerId: user.id,
+                    playerId: game.getPlayerProfile().id,
                     checkerId: game.getActiveChecker()?.id ?? -1,
                     startPosition: game.getActiveCheckerStartPosition(),
                     newPositions: game.getActiveCheckerMoves(),
@@ -31,7 +31,7 @@ export const BoardSquare: React.FC<BoardSquareProps> = ({ x, y, children, game, 
                 });
                 console.log(
                     `gameId - ${game.getGameId()}\n`,
-                    `playerId - ${user.id}\n`,
+                    `playerId - ${game.getPlayerProfile().id}\n`,
                     `checkerId - ${game.getActiveChecker()?.id ?? -1}\n`,
                     `startPosition - ${game.getActiveCheckerStartPosition()}\n`,
                     `newPositions - ${game.getActiveCheckerMoves().join(',')}\n`,
@@ -44,11 +44,13 @@ export const BoardSquare: React.FC<BoardSquareProps> = ({ x, y, children, game, 
                 const playerIsUserOne = game.getPlayerColor() === CheckerColor.WHITE;
                 if (game.getCountOfDeadCheckers(enemyColor) === 12) {
                     const winner = playerIsUserOne ? WinnerStatus.USER_1 : WinnerStatus.USER_2;
+                    const playerProfile = game.getPlayerProfile();
+                    const enemyProfile = game.getEnemyProfile();
                     const { userOneEarned, userTwoEarned } = pointsEarned({
-                        userOnePoints: playerIsUserOne ? user.profile.rating : enemy.rating,
-                        userOneGames: playerIsUserOne ? user.profile.games : enemy.games,
-                        userTwoPoints: playerIsUserOne ? enemy.rating : user.profile.rating,
-                        userTwoGames: playerIsUserOne ? enemy.games : user.profile.games,
+                        userOnePoints: playerIsUserOne ? playerProfile.rating : enemyProfile.rating,
+                        userOneGames: playerIsUserOne ? playerProfile.games : enemyProfile.games,
+                        userTwoPoints: playerIsUserOne ? enemyProfile.rating : playerProfile.rating,
+                        userTwoGames: playerIsUserOne ? enemyProfile.games : playerProfile.games,
                         winner: winner,
                     });
                     socket.emit('endGameRequest', {
@@ -63,7 +65,7 @@ export const BoardSquare: React.FC<BoardSquareProps> = ({ x, y, children, game, 
             }
             updateState(moment().format('x'));
         },
-        [enemy, game, updateState, user, x, y],
+        [game, updateState, x, y],
     );
     const canDropHandle = useCallback((item: CheckerProperty) => game.canDoMoveHere(item, x, y), [game, x, y]);
 

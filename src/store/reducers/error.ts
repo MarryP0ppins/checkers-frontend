@@ -35,7 +35,8 @@ interface ErrorPayload {
         isFrontend?: boolean;
         notAuth?: boolean;
         needHideButton?: boolean;
-    } & Record<string, unknown>;
+        customDescription?: string;
+    };
     actionButtonClick?: () => void;
     cancelButtonClick?: () => void;
 }
@@ -59,17 +60,17 @@ export const errorSlice = createSlice<ErrorState, SliceCaseReducers<ErrorState>>
             return initialState;
         },
         error: (state, action: PayloadAction<ErrorPayload>) => {
-            const { isFrontend, notAuth, needHideButton, ...restExtraParams } = action.payload.extra;
+            const { isFrontend, notAuth, needHideButton, customDescription, ...restExtraParams } =
+                action.payload.extra ?? {};
 
             state.error = action.payload.message === 'Rejected' ? 'Ой, что-то пошло не так!' : action.payload.message;
             state.extra = restExtraParams;
             state.notAuth = notAuth;
             state.needHideButton = needHideButton;
             state.isFrontend = typeof isFrontend === 'boolean' ? isFrontend : true;
+            state.customDescription = customDescription;
             state.actionButtonClick = action.payload.actionButtonClick;
             state.cancelButtonClick = action.payload.cancelButtonClick;
-            if (action.payload.extra.customDescription !== undefined)
-                state.customDescription = String(action.payload.extra.customDescription);
         },
         clear: () => {
             return initialState;

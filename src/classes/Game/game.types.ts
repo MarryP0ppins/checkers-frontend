@@ -1,3 +1,5 @@
+import { ProfileResponse } from 'types/profile';
+
 export enum CheckerColor {
     BLACK = 'black',
     WHITE = 'white',
@@ -23,6 +25,8 @@ export interface GameConstructorProps {
     gameId: number;
     playerTurn: boolean;
     checkersProperties?: CheckerProperty[];
+    playerProfile: ProfileResponse;
+    enemyProfile: ProfileResponse;
 }
 
 export interface MoveProps {

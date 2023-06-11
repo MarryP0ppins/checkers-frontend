@@ -18,7 +18,7 @@ const coef = (points: number, games: number): number => {
     }
 };
 
-const S = (winner: WinnerStatus, isUserOne: boolean): 1 | 0.5 | 0 => {
+const S = (winner: WinnerStatus, isUserOne: boolean): number => {
     if (winner === WinnerStatus.USER_1) {
         return isUserOne ? 1 : 0;
     }
@@ -33,9 +33,13 @@ export const pointsEarned = (props: pointsEarnedProps): { userOneEarned: number;
 
     const Ea = 1 / (1 + Math.pow(10, (userTwoPoints - userOnePoints) / 400));
     const Eb = 1 / (1 + Math.pow(10, (userOnePoints - userTwoPoints) / 400));
-
-    const userOneEarned = userOnePoints + coef(userOnePoints, userOneGames) * (S(winner, true) - Ea);
-    const userTwoEarned = userTwoPoints + coef(userTwoPoints, userTwoGames) * (S(winner, false) - Eb);
-
-    return { userOneEarned, userTwoEarned };
+    console.log(coef(userOnePoints, userOneGames) * (S(winner, true) - Ea));
+    console.log(coef(userTwoPoints, userTwoGames) * (S(winner, false) - Eb));
+    const userOneEarned = Number(userOnePoints) + coef(userOnePoints, userOneGames) * (S(winner, true) - Ea);
+    const userTwoEarned = Number(userTwoPoints) + coef(userTwoPoints, userTwoGames) * (S(winner, false) - Eb);
+    console.log(userOneEarned, userTwoEarned);
+    return {
+        userOneEarned: Number(Number(userOneEarned).toFixed(2)),
+        userTwoEarned: Number(Number(userTwoEarned).toFixed(2)),
+    };
 };

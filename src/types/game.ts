@@ -1,3 +1,4 @@
+import { GameListData } from 'pages/GameListPage/GameListPage.types';
 import { UserResponse } from 'types/singin';
 
 export enum ItemTypes {
@@ -54,10 +55,7 @@ export interface JoinGameProps {
     userId: number;
 }
 
-export interface EnemyProfile {
-    id: number;
-    username: string;
-    wins: number;
-    games: number;
-    rating: number;
+export interface EndGameProps{
+    winner: WinnerStatus;
+    openGames: GameListData[]
 }

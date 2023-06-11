@@ -90,7 +90,7 @@ export const UserPage: React.FC = () => {
             <div className={cnProfile('stats')}>
                 <div>{`Кол-во побед: ${user?.profile.wins ?? '-'}`}</div>
                 <div>{`Кол-во игр: ${user?.profile.games ?? '-'}`}</div>
-                <div>{`Очков рейтинг: ${user?.profile.rating ?? '-'}`}</div>
+                <div>{`Очков рейтинга: ${user?.profile.rating ?? '-'}`}</div>
             </div>
             <Paper sx={{ width: 'min-content', overflow: 'hidden', height: 400, position: 'relative' }}>
                 <PageLoader />

@@ -12,6 +12,6 @@ export const profileRequest = async (params?: ProfileParamsRequest): Promise<Pro
     });
 };
 
-export const profileByIdRequest = async (userId: number): Promise<ProfileResponse[]> => {
+export const profileByIdRequest = async (userId: number): Promise<ProfileResponse> => {
     return await getApiRequest(`/profile/${userId}/`);
 };

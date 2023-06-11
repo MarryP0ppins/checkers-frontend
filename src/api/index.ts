@@ -1,9 +1,10 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { CheckerColor } from 'classes/Game/game.types';
 import { io, Socket } from 'socket.io-client';
-import { openGamesReducer, removeOpenGamesReducer, setNewGameData } from 'store/reducers/game';
+import { openGamesReducer, removeOpenGamesReducer, setGameWinner, setNewGameData } from 'store/reducers/game';
 import { loaded } from 'store/reducers/loader';
 import { enemyMove, newMove } from 'store/reducers/move';
+import { resetEnemyProfileState } from 'store/reducers/profile';
 import { store } from 'store/store';
 import { ClientToServerEvents, ServerToClientEvents } from 'types/api';
 
@@ -129,4 +130,10 @@ socket.on('enemyMove', (data) => {
 socket.on('gameStart', (data) => {
     store.dispatch(setNewGameData(data));
     store.dispatch(loaded({ forced: true }));
+});
+
+socket.on('gameEnd', (data) => {
+    store.dispatch(resetEnemyProfileState());
+    store.dispatch(openGamesReducer(data.openGames));
+    store.dispatch(setGameWinner(data.winner));
 });

@@ -1,14 +1,13 @@
 import { ActionCreatorWithoutPayload, createSlice, SliceCaseReducers } from '@reduxjs/toolkit';
 import { getEnemyProfileAction, getProfileAction } from 'store/actions/profile';
 import { FetchStatus } from 'types/api';
-import { EnemyProfile } from 'types/game';
 import { ProfileResponse } from 'types/profile';
 
 export interface ProfileState {
     profiles: ProfileResponse[];
     fetchProfileStatus: FetchStatus;
     fetchEnemyProfileStatus: FetchStatus;
-    enemyProfile: EnemyProfile | null;
+    enemyProfile: ProfileResponse | null;
     error: unknown;
 }
 
@@ -25,6 +24,10 @@ const profileSlice = createSlice<ProfileState, SliceCaseReducers<ProfileState>>(
     initialState,
     reducers: {
         reset: () => initialState,
+        resetEnemyProfile: (state) => {
+            state.enemyProfile = null;
+            state.fetchEnemyProfileStatus = FetchStatus.INITIAL
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -47,7 +50,8 @@ const profileSlice = createSlice<ProfileState, SliceCaseReducers<ProfileState>>(
             })
             .addCase(getEnemyProfileAction.fulfilled, (state, { payload }) => {
                 state.fetchEnemyProfileStatus = FetchStatus.FETCHED;
-                state.profiles = payload;
+                console.log(payload)
+                state.enemyProfile = payload;
             })
             .addCase(getEnemyProfileAction.rejected, (state, { error }) => {
                 state.fetchEnemyProfileStatus = FetchStatus.ERROR;
@@ -57,4 +61,5 @@ const profileSlice = createSlice<ProfileState, SliceCaseReducers<ProfileState>>(
 });
 
 export const resetProfileState = profileSlice.actions.reset as ActionCreatorWithoutPayload<string>;
+export const resetEnemyProfileState = profileSlice.actions.resetEnemyProfile as ActionCreatorWithoutPayload<string>;
 export const profileReducer = profileSlice.reducer;

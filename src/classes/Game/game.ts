@@ -1,6 +1,7 @@
 import { CheckerColor, CheckerProperty, GameConstructorProps, MoveProps, PossibleMove } from 'classes/Game/game.types';
 import { newMove } from 'store/reducers/move';
 import { store } from 'store/store';
+import { ProfileResponse } from 'types/profile';
 
 export class Game {
     private checkersProperties: CheckerProperty[] = [
@@ -16,18 +17,18 @@ export class Game {
         { id: 9, x: 2, y: 2, death: false, isKing: false, color: CheckerColor.WHITE },
         { id: 10, x: 4, y: 2, death: false, isKing: false, color: CheckerColor.WHITE },
         { id: 11, x: 6, y: 2, death: false, isKing: false, color: CheckerColor.WHITE },
-        { id: 12, x: 7, y: 7, death: false, isKing: false, color: CheckerColor.BLACK },
-        { id: 13, x: 5, y: 7, death: false, isKing: false, color: CheckerColor.BLACK },
-        { id: 14, x: 3, y: 7, death: false, isKing: false, color: CheckerColor.BLACK },
-        { id: 15, x: 1, y: 7, death: false, isKing: false, color: CheckerColor.BLACK },
-        { id: 16, x: 6, y: 6, death: false, isKing: false, color: CheckerColor.BLACK },
-        { id: 17, x: 4, y: 6, death: false, isKing: false, color: CheckerColor.BLACK },
-        { id: 18, x: 2, y: 6, death: false, isKing: false, color: CheckerColor.BLACK },
-        { id: 19, x: 0, y: 6, death: false, isKing: false, color: CheckerColor.BLACK },
-        { id: 20, x: 7, y: 5, death: false, isKing: false, color: CheckerColor.BLACK },
+        { id: 12, x: 7, y: 7, death: true, isKing: false, color: CheckerColor.BLACK },
+        { id: 13, x: 5, y: 7, death: true, isKing: false, color: CheckerColor.BLACK },
+        { id: 14, x: 3, y: 7, death: true, isKing: false, color: CheckerColor.BLACK },
+        { id: 15, x: 1, y: 7, death: true, isKing: false, color: CheckerColor.BLACK },
+        { id: 16, x: 6, y: 6, death: true, isKing: false, color: CheckerColor.BLACK },
+        { id: 17, x: 4, y: 6, death: true, isKing: false, color: CheckerColor.BLACK },
+        { id: 18, x: 2, y: 6, death: true, isKing: false, color: CheckerColor.BLACK },
+        { id: 19, x: 0, y: 6, death: true, isKing: false, color: CheckerColor.BLACK },
+        { id: 20, x: 7, y: 5, death: true, isKing: false, color: CheckerColor.BLACK },
         { id: 21, x: 5, y: 5, death: false, isKing: false, color: CheckerColor.BLACK },
-        { id: 22, x: 3, y: 5, death: false, isKing: false, color: CheckerColor.BLACK },
-        { id: 23, x: 1, y: 5, death: false, isKing: false, color: CheckerColor.BLACK },
+        { id: 22, x: 3, y: 5, death: true, isKing: false, color: CheckerColor.BLACK },
+        { id: 23, x: 1, y: 5, death: true, isKing: false, color: CheckerColor.BLACK },
     ];
 
     private playerCheckersColor: CheckerColor = CheckerColor.WHITE;
@@ -39,10 +40,14 @@ export class Game {
     private checkersToKill: number[] = [];
     private playerTurn = false;
     private gameId: number;
+    private playerProfile: ProfileResponse;
+    private enemyProfile: ProfileResponse;
 
     constructor(value: GameConstructorProps) {
         this.gameId = value.gameId;
         this.playerCheckersColor = value.playerCheckersColor;
+        this.playerProfile = value.playerProfile;
+        this.enemyProfile = value.enemyProfile;
         value.checkersProperties?.forEach((property) => (this.checkersProperties[property.id] = { ...property }));
         this.playerTurn = value.playerTurn;
         if (this.playerTurn) {
@@ -106,6 +111,12 @@ export class Game {
         return this.checkersToKill;
     }
 
+    public getPlayerProfile(): ProfileResponse {
+        return this.playerProfile;
+    }
+    public getEnemyProfile(): ProfileResponse {
+        return this.enemyProfile;
+    }
     private findAllPossibleMoves(): void {
         this.possibleMoves = [];
         let possibleKills = false;
